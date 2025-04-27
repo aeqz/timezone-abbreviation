@@ -40,3 +40,5 @@ echo "Creating file $output for version $version..."
 cat $input | cargo run --quiet --release -- --version "$version" --data-dir "$dist_dir" > $output
 elm make $output
 elm-format --yes $output
+elm-verify-examples --run-tests
+elm-test
