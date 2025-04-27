@@ -16,6 +16,8 @@ Time.millisToPosix 1743465600000
 --> Ok (ShortName "BST")
 ```
 
+See some end-to-end example code in the [`examples/`][examples] folder.
+
 ## Design Goals
 
 The aim of providing time zone abbreviation data only may seem niche, but it's motivated by the fact that the `Time.Zone` type from `elm/time` doesn't have room for it. This package is expected to be used together with any other `Time.Zone` data source like [`justinmimbs/timezone-data`][timezonedata] and complete it with missing abbreviation data.
