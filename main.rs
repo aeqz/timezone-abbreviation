@@ -201,7 +201,7 @@ fn print_zone_function(
                     .or_default()
                     .push(*offset_minutes);
             }
-            print!("{function_name} = Internal.toTime (\\offsetMinutes posixSeconds -> ");
+            print!("{function_name} = Internal.toTime (\\time -> ");
             for (designations, offsets_minutes) in designation_offsets {
                 assert!(
                     !offsets_minutes.is_empty(),
@@ -214,20 +214,20 @@ fn print_zone_function(
                     }
                     // This doesn't get directly translated to a JS `==` when `offsetMinutes` is negative.
                     // But avoiding it doesn't seem to have a great impact on size once minified.
-                    print!("offsetMinutes == {offset_minutes}");
+                    print!("time.offsetMinutes == {offset_minutes}");
                 }
                 print!(" then Ok (");
                 for (transition, designation) in designations.transitions.iter().rev() {
                     // This also doesn't get directly translated to a JS `>=` when `posixSeconds` is negative.
                     // But avoiding it also doesn't seem to have a great impact on size once minified.
                     print!(
-                        "if posixSeconds >= {transition} then {} else ",
+                        "if time.posixSeconds >= {transition} then {} else ",
                         to_designation_value(designation)
                     );
                 }
                 print!("{}) else ", to_designation_value(&designations.initial));
             }
-            println!("Err offsetMinutes)");
+            println!("Err time.offsetMinutes)");
             assert!(
                 cache.insert(offset_designations, zone_name).is_none(),
                 "should not be already cached"
@@ -256,7 +256,7 @@ fn to_designation_value(designation: &Designation) -> String {
     match designation {
         Designation::Lmt => "Lmt".to_string(),
         Designation::Uninhabited => "Uninhabited".to_string(),
-        Designation::Offset => "Offset offsetMinutes".to_string(),
+        Designation::Offset => "Offset time.offsetMinutes".to_string(),
         Designation::ShortName(short_name) => format!("ShortName \"{short_name}\""),
     }
 }

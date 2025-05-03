@@ -181,7 +181,7 @@ forZone ( zoneName, zone ) =
 
             else
                 Internal.toTime
-                    (\offsetMinutes _ ->
+                    (\{ offsetMinutes } ->
                         if offsetMinutes /= offset then
                             Err (UnknownZoneOffset zoneName offsetMinutes)
 
@@ -229,7 +229,7 @@ forZoneUnsafe zone posix =
 
         Err _ ->
             Internal.toTime
-                (\offsetMinutes _ -> Offset offsetMinutes)
+                (.offsetMinutes >> Offset)
                 (Tuple.second zone)
                 posix
 

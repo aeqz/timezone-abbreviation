@@ -19,9 +19,9 @@ The wrapped function takes an offset in minutes and a POSIX time in seconds, and
 version takes a `Time.Zone` and a `Time.Posix` instead.
 
 -}
-toTime : (Int -> Int -> a) -> Zone -> Posix -> a
+toTime : ({ offsetMinutes : Int, posixSeconds : Int } -> a) -> Zone -> Posix -> a
 toTime f zone posix =
-    f (toOffset zone posix) (toSeconds posix)
+    f { offsetMinutes = toOffset zone posix, posixSeconds = toSeconds posix }
 
 
 toSeconds : Posix -> Int

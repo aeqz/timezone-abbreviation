@@ -16,12 +16,12 @@ suite =
         [ Test.describe "toTime" <|
             [ Test.fuzz Fuzz.posix "provides the posix value in seconds" <|
                 \posix ->
-                    Internal.toTime (\_ posixSeconds -> posixSeconds) Time.utc posix
+                    Internal.toTime .posixSeconds Time.utc posix
                         |> Expect.equal (Time.posixToMillis posix // 1000)
             , Test.describe "provides the zone offset"
                 [ Test.fuzz2 (Fuzz.fixedOffsetZone Internal.maxOffsetMinutes) Fuzz.posix "for an up to 3 day fixed-offset zone at any time" <|
                     \{ offset, zone } posix ->
-                        Internal.toTime (\offsetMinutes _ -> offsetMinutes) zone posix
+                        Internal.toTime .offsetMinutes zone posix
                             |> Expect.equal offset
                 , Test.concat <|
                     List.map
@@ -33,7 +33,7 @@ suite =
                                             component zone posix
                                                 |> Expect.equal (component otherZone posix)
                                     in
-                                    Internal.toTime (\zoneOffset _ -> Time.customZone zoneOffset []) zone posix
+                                    Internal.toTime (\{ offsetMinutes } -> Time.customZone offsetMinutes []) zone posix
                                         |> Expect.all
                                             [ same Time.toYear
                                             , same Time.toMonth

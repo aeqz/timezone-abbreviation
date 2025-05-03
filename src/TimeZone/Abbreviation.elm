@@ -181,7 +181,7 @@ forZone ( zoneName, zone ) =
 
             else
                 Internal.toTime
-                    (\offsetMinutes _ ->
+                    (\{ offsetMinutes } ->
                         if offsetMinutes /= offset then
                             Err (UnknownZoneOffset zoneName offsetMinutes)
 
@@ -229,7 +229,7 @@ forZoneUnsafe zone posix =
 
         Err _ ->
             Internal.toTime
-                (\offsetMinutes _ -> Offset offsetMinutes)
+                (.offsetMinutes >> Offset)
                 (Tuple.second zone)
                 posix
 
@@ -1910,15 +1910,15 @@ forZoneName name =
 for__africa__abidjan : Zone -> Posix -> Result Int Abbreviation
 for__africa__abidjan =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -17 || offsetMinutes == -16 then
+        (\time ->
+            if time.offsetMinutes == -17 || time.offsetMinutes == -16 then
                 Ok Lmt
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -1927,42 +1927,42 @@ for__africa__abidjan =
 for__africa__algiers : Zone -> Posix -> Result Int Abbreviation
 for__africa__algiers =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 12 || offsetMinutes == 13 then
+        (\time ->
+            if time.offsetMinutes == 12 || time.offsetMinutes == 13 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 9 || offsetMinutes == 10 then
+            else if time.offsetMinutes == 9 || time.offsetMinutes == 10 then
                 Ok (ShortName "PMT")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= 357523200 then
+                    (if time.posixSeconds >= 357523200 then
                         ShortName "CET"
 
-                     else if posixSeconds >= 325468800 then
+                     else if time.posixSeconds >= 325468800 then
                         ShortName "WEST"
 
-                     else if posixSeconds >= 246236400 then
+                     else if time.posixSeconds >= 246236400 then
                         ShortName "CET"
 
-                     else if posixSeconds >= 41468400 then
+                     else if time.posixSeconds >= 41468400 then
                         ShortName "WEST"
 
-                     else if posixSeconds >= -942012000 then
+                     else if time.posixSeconds >= -942012000 then
                         ShortName "CET"
 
                      else
                         ShortName "WEST"
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -1971,18 +1971,18 @@ for__africa__algiers =
 for__africa__bissau : Zone -> Posix -> Result Int Abbreviation
 for__africa__bissau =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -63 || offsetMinutes == -62 then
+        (\time ->
+            if time.offsetMinutes == -63 || time.offsetMinutes == -62 then
                 Ok Lmt
 
-            else if offsetMinutes == -60 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -60 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -1991,18 +1991,18 @@ for__africa__bissau =
 for__africa__cairo : Zone -> Posix -> Result Int Abbreviation
 for__africa__cairo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 125 || offsetMinutes == 126 then
+        (\time ->
+            if time.offsetMinutes == 125 || time.offsetMinutes == 126 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EEST")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2011,15 +2011,15 @@ for__africa__cairo =
 for__africa__casablanca : Zone -> Posix -> Result Int Abbreviation
 for__africa__casablanca =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -31 || offsetMinutes == -30 then
+        (\time ->
+            if time.offsetMinutes == -31 || time.offsetMinutes == -30 then
                 Ok Lmt
 
-            else if offsetMinutes == 0 || offsetMinutes == 60 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 0 || time.offsetMinutes == 60 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2028,27 +2028,27 @@ for__africa__casablanca =
 for__africa__ceuta : Zone -> Posix -> Result Int Abbreviation
 for__africa__ceuta =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -22 || offsetMinutes == -21 then
+        (\time ->
+            if time.offsetMinutes == -22 || time.offsetMinutes == -21 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= 448243200 then
+                    (if time.posixSeconds >= 448243200 then
                         ShortName "CET"
 
                      else
                         ShortName "WEST"
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2057,15 +2057,15 @@ for__africa__ceuta =
 for__africa__el_aaiun : Zone -> Posix -> Result Int Abbreviation
 for__africa__el_aaiun =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -53 || offsetMinutes == -52 then
+        (\time ->
+            if time.offsetMinutes == -53 || time.offsetMinutes == -52 then
                 Ok Lmt
 
-            else if offsetMinutes == -60 || offsetMinutes == 0 || offsetMinutes == 60 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -60 || time.offsetMinutes == 0 || time.offsetMinutes == 60 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2074,15 +2074,15 @@ for__africa__el_aaiun =
 for__africa__johannesburg : Zone -> Posix -> Result Int Abbreviation
 for__africa__johannesburg =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 112 then
+        (\time ->
+            if time.offsetMinutes == 112 then
                 Ok Lmt
 
-            else if offsetMinutes == 90 || offsetMinutes == 120 || offsetMinutes == 180 then
+            else if time.offsetMinutes == 90 || time.offsetMinutes == 120 || time.offsetMinutes == 180 then
                 Ok (ShortName "SAST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2091,24 +2091,24 @@ for__africa__johannesburg =
 for__africa__juba : Zone -> Posix -> Result Int Abbreviation
 for__africa__juba =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 126 || offsetMinutes == 127 then
+        (\time ->
+            if time.offsetMinutes == 126 || time.offsetMinutes == 127 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 947930400 then
+                    (if time.posixSeconds >= 947930400 then
                         ShortName "EAT"
 
                      else
                         ShortName "CAST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CAT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2117,24 +2117,24 @@ for__africa__juba =
 for__africa__khartoum : Zone -> Posix -> Result Int Abbreviation
 for__africa__khartoum =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 130 || offsetMinutes == 131 then
+        (\time ->
+            if time.offsetMinutes == 130 || time.offsetMinutes == 131 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 947930400 then
+                    (if time.posixSeconds >= 947930400 then
                         ShortName "EAT"
 
                      else
                         ShortName "CAST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CAT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2143,21 +2143,21 @@ for__africa__khartoum =
 for__africa__lagos : Zone -> Posix -> Result Int Abbreviation
 for__africa__lagos =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 13 || offsetMinutes == 14 then
+        (\time ->
+            if time.offsetMinutes == 13 || time.offsetMinutes == 14 then
                 Ok Lmt
 
-            else if offsetMinutes == 30 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 30 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "WAT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2166,15 +2166,15 @@ for__africa__lagos =
 for__africa__maputo : Zone -> Posix -> Result Int Abbreviation
 for__africa__maputo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 130 || offsetMinutes == 131 then
+        (\time ->
+            if time.offsetMinutes == 130 || time.offsetMinutes == 131 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CAT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2183,24 +2183,24 @@ for__africa__maputo =
 for__africa__monrovia : Zone -> Posix -> Result Int Abbreviation
 for__africa__monrovia =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -44 || offsetMinutes == -43 then
+        (\time ->
+            if time.offsetMinutes == -44 || time.offsetMinutes == -43 then
                 Ok
-                    (if posixSeconds >= -2776979812 then
+                    (if time.posixSeconds >= -2776979812 then
                         ShortName "MMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
-            else if offsetMinutes == -45 then
+            else if time.offsetMinutes == -45 then
                 Ok (ShortName "MMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2209,18 +2209,18 @@ for__africa__monrovia =
 for__africa__nairobi : Zone -> Posix -> Result Int Abbreviation
 for__africa__nairobi =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 147 || offsetMinutes == 148 then
+        (\time ->
+            if time.offsetMinutes == 147 || time.offsetMinutes == 148 then
                 Ok Lmt
 
-            else if offsetMinutes == 150 || offsetMinutes == 165 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 150 || time.offsetMinutes == 165 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EAT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2229,24 +2229,24 @@ for__africa__nairobi =
 for__africa__ndjamena : Zone -> Posix -> Result Int Abbreviation
 for__africa__ndjamena =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 61 then
+        (\time ->
+            if time.offsetMinutes == 61 then
                 Ok Lmt
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= -1830387612 then
+                    (if time.posixSeconds >= -1830387612 then
                         ShortName "WAT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "WAST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2255,18 +2255,18 @@ for__africa__ndjamena =
 for__africa__sao_tome : Zone -> Posix -> Result Int Abbreviation
 for__africa__sao_tome =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -37 || offsetMinutes == -36 || offsetMinutes == 26 || offsetMinutes == 27 then
+        (\time ->
+            if time.offsetMinutes == -37 || time.offsetMinutes == -36 || time.offsetMinutes == 26 || time.offsetMinutes == 27 then
                 Ok Lmt
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "WAT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2275,42 +2275,42 @@ for__africa__sao_tome =
 for__africa__tripoli : Zone -> Posix -> Result Int Abbreviation
 for__africa__tripoli =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 52 || offsetMinutes == 53 then
+        (\time ->
+            if time.offsetMinutes == 52 || time.offsetMinutes == 53 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 1382659200 then
+                    (if time.posixSeconds >= 1382659200 then
                         ShortName "EET"
 
-                     else if posixSeconds >= 1364515200 then
+                     else if time.posixSeconds >= 1364515200 then
                         ShortName "CEST"
 
-                     else if posixSeconds >= 875916000 then
+                     else if time.posixSeconds >= 875916000 then
                         ShortName "EET"
 
-                     else if posixSeconds >= 860108400 then
+                     else if time.posixSeconds >= 860108400 then
                         ShortName "CEST"
 
-                     else if posixSeconds >= 641775600 then
+                     else if time.posixSeconds >= 641775600 then
                         ShortName "EET"
 
-                     else if posixSeconds >= 386463600 then
+                     else if time.posixSeconds >= 386463600 then
                         ShortName "CEST"
 
-                     else if posixSeconds >= -347158800 then
+                     else if time.posixSeconds >= -347158800 then
                         ShortName "EET"
 
                      else
                         ShortName "CEST"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2319,21 +2319,21 @@ for__africa__tripoli =
 for__africa__tunis : Zone -> Posix -> Result Int Abbreviation
 for__africa__tunis =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 40 || offsetMinutes == 41 then
+        (\time ->
+            if time.offsetMinutes == 40 || time.offsetMinutes == 41 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 9 || offsetMinutes == 10 then
+            else if time.offsetMinutes == 9 || time.offsetMinutes == 10 then
                 Ok (ShortName "PMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2342,30 +2342,30 @@ for__africa__tunis =
 for__africa__windhoek : Zone -> Posix -> Result Int Abbreviation
 for__africa__windhoek =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 68 || offsetMinutes == 69 then
+        (\time ->
+            if time.offsetMinutes == 68 || time.offsetMinutes == 69 then
                 Ok Lmt
 
-            else if offsetMinutes == 90 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 90 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "SAST")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 637970400 then
+                    (if time.posixSeconds >= 637970400 then
                         ShortName "CAT"
 
                      else
                         ShortName "SAST"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "WAT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2374,34 +2374,34 @@ for__africa__windhoek =
 for__america__adak : Zone -> Posix -> Result Int Abbreviation
 for__america__adak =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -707 || offsetMinutes == -706 || offsetMinutes == 733 || offsetMinutes == 734 then
+        (\time ->
+            if time.offsetMinutes == -707 || time.offsetMinutes == -706 || time.offsetMinutes == 733 || time.offsetMinutes == 734 then
                 Ok Lmt
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok (ShortName "HDT")
 
-            else if offsetMinutes == -660 then
+            else if time.offsetMinutes == -660 then
                 Ok
-                    (if posixSeconds >= -86878800 then
+                    (if time.posixSeconds >= -86878800 then
                         ShortName "BST"
 
                      else
                         ShortName "NST"
                     )
 
-            else if offsetMinutes == -600 then
+            else if time.offsetMinutes == -600 then
                 Ok
-                    (if posixSeconds >= 439034400 then
+                    (if time.posixSeconds >= 439034400 then
                         ShortName "HST"
 
-                     else if posixSeconds >= 436363200 then
+                     else if time.posixSeconds >= 436363200 then
                         ShortName "AHST"
 
-                     else if posixSeconds >= -21466800 then
+                     else if time.posixSeconds >= -21466800 then
                         ShortName "BDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "NPT"
 
                      else
@@ -2409,7 +2409,7 @@ for__america__adak =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2418,37 +2418,37 @@ for__america__adak =
 for__america__anchorage : Zone -> Posix -> Result Int Abbreviation
 for__america__anchorage =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -599 || offsetMinutes == 840 || offsetMinutes == 841 then
+        (\time ->
+            if time.offsetMinutes == -599 || time.offsetMinutes == 840 || time.offsetMinutes == 841 then
                 Ok Lmt
 
-            else if offsetMinutes == -600 then
+            else if time.offsetMinutes == -600 then
                 Ok
-                    (if posixSeconds >= -86882400 then
+                    (if time.posixSeconds >= -86882400 then
                         ShortName "AHST"
 
-                     else if posixSeconds >= -2188951224 then
+                     else if time.posixSeconds >= -2188951224 then
                         ShortName "AST"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok (ShortName "AKDT")
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok
-                    (if posixSeconds >= 439030800 then
+                    (if time.posixSeconds >= 439030800 then
                         ShortName "AKST"
 
-                     else if posixSeconds >= 436359600 then
+                     else if time.posixSeconds >= 436359600 then
                         ShortName "YST"
 
-                     else if posixSeconds >= -21470400 then
+                     else if time.posixSeconds >= -21470400 then
                         ShortName "AHDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "APT"
 
                      else
@@ -2456,7 +2456,7 @@ for__america__anchorage =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2465,15 +2465,15 @@ for__america__anchorage =
 for__america__araguaina : Zone -> Posix -> Result Int Abbreviation
 for__america__araguaina =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -193 || offsetMinutes == -192 then
+        (\time ->
+            if time.offsetMinutes == -193 || time.offsetMinutes == -192 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2482,18 +2482,18 @@ for__america__araguaina =
 for__america__argentina__buenos_aires : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__buenos_aires =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -234 || offsetMinutes == -233 then
+        (\time ->
+            if time.offsetMinutes == -234 || time.offsetMinutes == -233 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2502,18 +2502,18 @@ for__america__argentina__buenos_aires =
 for__america__argentina__catamarca : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__catamarca =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -264 || offsetMinutes == -263 then
+        (\time ->
+            if time.offsetMinutes == -264 || time.offsetMinutes == -263 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2522,21 +2522,21 @@ for__america__argentina__catamarca =
 for__america__argentina__cordoba : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__cordoba =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -257 || offsetMinutes == -256 then
+        (\time ->
+            if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok
-                    (if posixSeconds >= -2372096592 then
+                    (if time.posixSeconds >= -2372096592 then
                         ShortName "CMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2545,18 +2545,18 @@ for__america__argentina__cordoba =
 for__america__argentina__jujuy : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__jujuy =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -262 || offsetMinutes == -261 then
+        (\time ->
+            if time.offsetMinutes == -262 || time.offsetMinutes == -261 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2565,18 +2565,18 @@ for__america__argentina__jujuy =
 for__america__argentina__la_rioja : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__la_rioja =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -268 || offsetMinutes == -267 then
+        (\time ->
+            if time.offsetMinutes == -268 || time.offsetMinutes == -267 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2585,18 +2585,18 @@ for__america__argentina__la_rioja =
 for__america__argentina__mendoza : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__mendoza =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -276 || offsetMinutes == -275 then
+        (\time ->
+            if time.offsetMinutes == -276 || time.offsetMinutes == -275 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2605,18 +2605,18 @@ for__america__argentina__mendoza =
 for__america__argentina__rio_gallegos : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__rio_gallegos =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -277 || offsetMinutes == -276 then
+        (\time ->
+            if time.offsetMinutes == -277 || time.offsetMinutes == -276 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2632,18 +2632,18 @@ for__america__argentina__salta =
 for__america__argentina__san_juan : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__san_juan =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -275 || offsetMinutes == -274 then
+        (\time ->
+            if time.offsetMinutes == -275 || time.offsetMinutes == -274 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2652,18 +2652,18 @@ for__america__argentina__san_juan =
 for__america__argentina__san_luis : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__san_luis =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -266 || offsetMinutes == -265 then
+        (\time ->
+            if time.offsetMinutes == -266 || time.offsetMinutes == -265 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2672,18 +2672,18 @@ for__america__argentina__san_luis =
 for__america__argentina__tucuman : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__tucuman =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -261 || offsetMinutes == -260 then
+        (\time ->
+            if time.offsetMinutes == -261 || time.offsetMinutes == -260 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2692,18 +2692,18 @@ for__america__argentina__tucuman =
 for__america__argentina__ushuaia : Zone -> Posix -> Result Int Abbreviation
 for__america__argentina__ushuaia =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -274 || offsetMinutes == -273 then
+        (\time ->
+            if time.offsetMinutes == -274 || time.offsetMinutes == -273 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -257 || offsetMinutes == -256 then
+            else if time.offsetMinutes == -257 || time.offsetMinutes == -256 then
                 Ok (ShortName "CMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2712,21 +2712,21 @@ for__america__argentina__ushuaia =
 for__america__asuncion : Zone -> Posix -> Result Int Abbreviation
 for__america__asuncion =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -231 || offsetMinutes == -230 then
+        (\time ->
+            if time.offsetMinutes == -231 || time.offsetMinutes == -230 then
                 Ok
-                    (if posixSeconds >= -2524507760 then
+                    (if time.posixSeconds >= -2524507760 then
                         ShortName "AMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2735,15 +2735,15 @@ for__america__asuncion =
 for__america__bahia : Zone -> Posix -> Result Int Abbreviation
 for__america__bahia =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -155 || offsetMinutes == -154 then
+        (\time ->
+            if time.offsetMinutes == -155 || time.offsetMinutes == -154 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2752,36 +2752,36 @@ for__america__bahia =
 for__america__bahia_banderas : Zone -> Posix -> Result Int Abbreviation
 for__america__bahia_banderas =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -421 then
+        (\time ->
+            if time.offsetMinutes == -421 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 1288508400 then
+                    (if time.posixSeconds >= 1288508400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= 828867600 then
+                     else if time.posixSeconds >= 828867600 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -1191344400 then
+                     else if time.posixSeconds >= -1191344400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -1220461200 then
+                     else if time.posixSeconds >= -1220461200 then
                         ShortName "MDT"
 
                      else
                         ShortName "CST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2790,21 +2790,21 @@ for__america__bahia_banderas =
 for__america__barbados : Zone -> Posix -> Result Int Abbreviation
 for__america__barbados =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -239 || offsetMinutes == -238 then
+        (\time ->
+            if time.offsetMinutes == -239 || time.offsetMinutes == -238 then
                 Ok Lmt
 
-            else if offsetMinutes == -210 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -210 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok (ShortName "ADT")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2813,15 +2813,15 @@ for__america__barbados =
 for__america__belem : Zone -> Posix -> Result Int Abbreviation
 for__america__belem =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -194 || offsetMinutes == -193 then
+        (\time ->
+            if time.offsetMinutes == -194 || time.offsetMinutes == -193 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2830,22 +2830,22 @@ for__america__belem =
 for__america__belize : Zone -> Posix -> Result Int Abbreviation
 for__america__belize =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -353 || offsetMinutes == -352 then
+        (\time ->
+            if time.offsetMinutes == -353 || time.offsetMinutes == -352 then
                 Ok Lmt
 
-            else if offsetMinutes == -330 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -330 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 123919200 then
+                    (if time.posixSeconds >= 123919200 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
                      else
@@ -2853,7 +2853,7 @@ for__america__belize =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2862,15 +2862,15 @@ for__america__belize =
 for__america__boa_vista : Zone -> Posix -> Result Int Abbreviation
 for__america__boa_vista =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -243 || offsetMinutes == -242 then
+        (\time ->
+            if time.offsetMinutes == -243 || time.offsetMinutes == -242 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2879,21 +2879,21 @@ for__america__boa_vista =
 for__america__bogota : Zone -> Posix -> Result Int Abbreviation
 for__america__bogota =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -297 || offsetMinutes == -296 then
+        (\time ->
+            if time.offsetMinutes == -297 || time.offsetMinutes == -296 then
                 Ok
-                    (if posixSeconds >= -2707671824 then
+                    (if time.posixSeconds >= -2707671824 then
                         ShortName "BMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -300 || offsetMinutes == -240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -300 || time.offsetMinutes == -240 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2902,36 +2902,36 @@ for__america__bogota =
 for__america__boise : Zone -> Posix -> Result Int Abbreviation
 for__america__boise =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -465 || offsetMinutes == -464 then
+        (\time ->
+            if time.offsetMinutes == -465 || time.offsetMinutes == -464 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= -84380400 then
+                    (if time.posixSeconds >= -84380400 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
                      else
                         ShortName "MWT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= -1471788000 then
+                    (if time.posixSeconds >= -1471788000 then
                         ShortName "MST"
 
                      else
                         ShortName "PDT"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok (ShortName "PST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2940,34 +2940,34 @@ for__america__boise =
 for__america__cambridge_bay : Zone -> Posix -> Result Int Abbreviation
 for__america__cambridge_bay =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 0 then
+        (\time ->
+            if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 972802800 then
+                    (if time.posixSeconds >= 972802800 then
                         ShortName "EST"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 986115600 then
+                    (if time.posixSeconds >= 986115600 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= 941356800 then
+                     else if time.posixSeconds >= 941356800 then
                         ShortName "CST"
 
-                     else if posixSeconds >= 73472400 then
+                     else if time.posixSeconds >= 73472400 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
                      else
@@ -2975,7 +2975,7 @@ for__america__cambridge_bay =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -2984,15 +2984,15 @@ for__america__cambridge_bay =
 for__america__campo_grande : Zone -> Posix -> Result Int Abbreviation
 for__america__campo_grande =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -219 || offsetMinutes == -218 then
+        (\time ->
+            if time.offsetMinutes == -219 || time.offsetMinutes == -218 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3001,28 +3001,28 @@ for__america__campo_grande =
 for__america__cancun : Zone -> Posix -> Result Int Abbreviation
 for__america__cancun =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -348 || offsetMinutes == -347 then
+        (\time ->
+            if time.offsetMinutes == -348 || time.offsetMinutes == -347 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 1422777600 then
+                    (if time.posixSeconds >= 1422777600 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 902037600 then
+                     else if time.posixSeconds >= 902037600 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= 877849200 then
+                     else if time.posixSeconds >= 877849200 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 828864000 then
+                     else if time.posixSeconds >= 828864000 then
                         ShortName "CDT"
 
                      else
@@ -3030,7 +3030,7 @@ for__america__cancun =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3039,21 +3039,21 @@ for__america__cancun =
 for__america__caracas : Zone -> Posix -> Result Int Abbreviation
 for__america__caracas =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -268 || offsetMinutes == -267 then
+        (\time ->
+            if time.offsetMinutes == -268 || time.offsetMinutes == -267 then
                 Ok
-                    (if posixSeconds >= -2524505536 then
+                    (if time.posixSeconds >= -2524505536 then
                         ShortName "CMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -270 || offsetMinutes == -240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -270 || time.offsetMinutes == -240 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3062,15 +3062,15 @@ for__america__caracas =
 for__america__cayenne : Zone -> Posix -> Result Int Abbreviation
 for__america__cayenne =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -210 || offsetMinutes == -209 then
+        (\time ->
+            if time.offsetMinutes == -210 || time.offsetMinutes == -209 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3079,36 +3079,36 @@ for__america__cayenne =
 for__america__chicago : Zone -> Posix -> Result Int Abbreviation
 for__america__chicago =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -351 || offsetMinutes == -350 then
+        (\time ->
+            if time.offsetMinutes == -351 || time.offsetMinutes == -350 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= -747244800 then
+                    (if time.posixSeconds >= -747244800 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
-                     else if posixSeconds >= -1031500800 then
+                     else if time.posixSeconds >= -1031500800 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -1067788800 then
+                     else if time.posixSeconds >= -1067788800 then
                         ShortName "EST"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3117,36 +3117,36 @@ for__america__chicago =
 for__america__chihuahua : Zone -> Posix -> Result Int Abbreviation
 for__america__chihuahua =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -425 || offsetMinutes == -424 then
+        (\time ->
+            if time.offsetMinutes == -425 || time.offsetMinutes == -424 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 1667116800 then
+                    (if time.posixSeconds >= 1667116800 then
                         ShortName "CST"
 
-                     else if posixSeconds >= 891766800 then
+                     else if time.posixSeconds >= 891766800 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -1191344400 then
+                     else if time.posixSeconds >= -1191344400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -1220461200 then
+                     else if time.posixSeconds >= -1220461200 then
                         ShortName "MDT"
 
                      else
                         ShortName "CST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3155,36 +3155,36 @@ for__america__chihuahua =
 for__america__ciudad_juarez : Zone -> Posix -> Result Int Abbreviation
 for__america__ciudad_juarez =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -426 || offsetMinutes == -425 then
+        (\time ->
+            if time.offsetMinutes == -426 || time.offsetMinutes == -425 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 1667116800 then
+                    (if time.posixSeconds >= 1667116800 then
                         ShortName "CST"
 
-                     else if posixSeconds >= 891766800 then
+                     else if time.posixSeconds >= 891766800 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -1191344400 then
+                     else if time.posixSeconds >= -1191344400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -1220461200 then
+                     else if time.posixSeconds >= -1220461200 then
                         ShortName "MDT"
 
                      else
                         ShortName "CST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3193,24 +3193,24 @@ for__america__ciudad_juarez =
 for__america__costa_rica : Zone -> Posix -> Result Int Abbreviation
 for__america__costa_rica =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -337 || offsetMinutes == -336 then
+        (\time ->
+            if time.offsetMinutes == -337 || time.offsetMinutes == -336 then
                 Ok
-                    (if posixSeconds >= -2524501427 then
+                    (if time.posixSeconds >= -2524501427 then
                         ShortName "SJMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3219,15 +3219,15 @@ for__america__costa_rica =
 for__america__cuiaba : Zone -> Posix -> Result Int Abbreviation
 for__america__cuiaba =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -225 || offsetMinutes == -224 then
+        (\time ->
+            if time.offsetMinutes == -225 || time.offsetMinutes == -224 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3236,18 +3236,18 @@ for__america__cuiaba =
 for__america__danmarkshavn : Zone -> Posix -> Result Int Abbreviation
 for__america__danmarkshavn =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -75 || offsetMinutes == -74 then
+        (\time ->
+            if time.offsetMinutes == -75 || time.offsetMinutes == -74 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3256,42 +3256,42 @@ for__america__danmarkshavn =
 for__america__dawson : Zone -> Posix -> Result Int Abbreviation
 for__america__dawson =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -558 || offsetMinutes == -557 then
+        (\time ->
+            if time.offsetMinutes == -558 || time.offsetMinutes == -557 then
                 Ok Lmt
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= 1604214000 then
+                    (if time.posixSeconds >= 1604214000 then
                         ShortName "MST"
 
-                     else if posixSeconds >= 325677600 then
+                     else if time.posixSeconds >= 325677600 then
                         ShortName "PDT"
 
                      else
                         ShortName "YDDT"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok
-                    (if posixSeconds >= 120646800 then
+                    (if time.posixSeconds >= 120646800 then
                         ShortName "PST"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "YPT"
 
-                     else if posixSeconds >= -880203600 then
+                     else if time.posixSeconds >= -880203600 then
                         ShortName "YWT"
 
                      else
                         ShortName "YDT"
                     )
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok (ShortName "YST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3300,31 +3300,31 @@ for__america__dawson =
 for__america__dawson_creek : Zone -> Posix -> Result Int Abbreviation
 for__america__dawson_creek =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -481 then
+        (\time ->
+            if time.offsetMinutes == -481 then
                 Ok Lmt
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok
-                    (if posixSeconds >= -2713881544 then
+                    (if time.posixSeconds >= -2713881544 then
                         ShortName "PST"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= 84013200 then
+                    (if time.posixSeconds >= 84013200 then
                         ShortName "MST"
 
-                     else if posixSeconds >= -715788000 then
+                     else if time.posixSeconds >= -715788000 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "PPT"
 
-                     else if posixSeconds >= -880207200 then
+                     else if time.posixSeconds >= -880207200 then
                         ShortName "PWT"
 
                      else
@@ -3332,7 +3332,7 @@ for__america__dawson_creek =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3341,28 +3341,28 @@ for__america__dawson_creek =
 for__america__denver : Zone -> Posix -> Result Int Abbreviation
 for__america__denver =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -419 then
+        (\time ->
+            if time.offsetMinutes == -419 then
                 Ok Lmt
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= -2717643600 then
+                    (if time.posixSeconds >= -2717643600 then
                         ShortName "MST"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= -147884400 then
+                    (if time.posixSeconds >= -147884400 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
-                     else if posixSeconds >= -880210800 then
+                     else if time.posixSeconds >= -880210800 then
                         ShortName "MWT"
 
                      else
@@ -3370,7 +3370,7 @@ for__america__denver =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3379,22 +3379,22 @@ for__america__denver =
 for__america__detroit : Zone -> Posix -> Result Int Abbreviation
 for__america__detroit =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -333 || offsetMinutes == -332 then
+        (\time ->
+            if time.offsetMinutes == -333 || time.offsetMinutes == -332 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok
-                    (if posixSeconds >= -684349200 then
+                    (if time.posixSeconds >= -684349200 then
                         ShortName "EDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "EPT"
 
                      else
@@ -3402,7 +3402,7 @@ for__america__detroit =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3411,30 +3411,30 @@ for__america__detroit =
 for__america__edmonton : Zone -> Posix -> Result Int Abbreviation
 for__america__edmonton =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -454 || offsetMinutes == -453 then
+        (\time ->
+            if time.offsetMinutes == -454 || time.offsetMinutes == -453 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= -715791600 then
+                    (if time.posixSeconds >= -715791600 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
-                     else if posixSeconds >= -880210800 then
+                     else if time.posixSeconds >= -880210800 then
                         ShortName "MWT"
 
                      else
                         ShortName "MDT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3443,15 +3443,15 @@ for__america__edmonton =
 for__america__eirunepe : Zone -> Posix -> Result Int Abbreviation
 for__america__eirunepe =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -280 || offsetMinutes == -279 then
+        (\time ->
+            if time.offsetMinutes == -280 || time.offsetMinutes == -279 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 || offsetMinutes == -240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -300 || time.offsetMinutes == -240 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3460,18 +3460,18 @@ for__america__eirunepe =
 for__america__el_salvador : Zone -> Posix -> Result Int Abbreviation
 for__america__el_salvador =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -357 || offsetMinutes == -356 then
+        (\time ->
+            if time.offsetMinutes == -357 || time.offsetMinutes == -356 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3480,33 +3480,33 @@ for__america__el_salvador =
 for__america__fort_nelson : Zone -> Posix -> Result Int Abbreviation
 for__america__fort_nelson =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -491 || offsetMinutes == -490 then
+        (\time ->
+            if time.offsetMinutes == -491 || time.offsetMinutes == -490 then
                 Ok Lmt
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= 1425808800 then
+                    (if time.posixSeconds >= 1425808800 then
                         ShortName "MST"
 
-                     else if posixSeconds >= -715788000 then
+                     else if time.posixSeconds >= -715788000 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "PPT"
 
-                     else if posixSeconds >= -880207200 then
+                     else if time.posixSeconds >= -880207200 then
                         ShortName "PWT"
 
                      else
                         ShortName "PDT"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok (ShortName "PST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3515,15 +3515,15 @@ for__america__fort_nelson =
 for__america__fortaleza : Zone -> Posix -> Result Int Abbreviation
 for__america__fortaleza =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -154 then
+        (\time ->
+            if time.offsetMinutes == -154 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3532,28 +3532,28 @@ for__america__fortaleza =
 for__america__glace_bay : Zone -> Posix -> Result Int Abbreviation
 for__america__glace_bay =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -239 then
+        (\time ->
+            if time.offsetMinutes == -239 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok
-                    (if posixSeconds >= -2131646412 then
+                    (if time.posixSeconds >= -2131646412 then
                         ShortName "AST"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok
-                    (if posixSeconds >= -526500000 then
+                    (if time.posixSeconds >= -526500000 then
                         ShortName "ADT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "APT"
 
-                     else if posixSeconds >= -880221600 then
+                     else if time.posixSeconds >= -880221600 then
                         ShortName "AWT"
 
                      else
@@ -3561,7 +3561,7 @@ for__america__glace_bay =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3570,42 +3570,42 @@ for__america__glace_bay =
 for__america__goose_bay : Zone -> Posix -> Result Int Abbreviation
 for__america__goose_bay =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -242 || offsetMinutes == -241 then
+        (\time ->
+            if time.offsetMinutes == -242 || time.offsetMinutes == -241 then
                 Ok Lmt
 
-            else if offsetMinutes == -120 then
+            else if time.offsetMinutes == -120 then
                 Ok (ShortName "ADDT")
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok (ShortName "ADT")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
-            else if offsetMinutes == -151 then
+            else if time.offsetMinutes == -151 then
                 Ok (ShortName "NDT")
 
-            else if offsetMinutes == -150 then
+            else if time.offsetMinutes == -150 then
                 Ok
-                    (if posixSeconds >= -746044200 then
+                    (if time.posixSeconds >= -746044200 then
                         ShortName "NDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "NPT"
 
-                     else if posixSeconds >= -872368200 then
+                     else if time.posixSeconds >= -872368200 then
                         ShortName "NWT"
 
                      else
                         ShortName "NDT"
                     )
 
-            else if offsetMinutes == -211 || offsetMinutes == -210 then
+            else if time.offsetMinutes == -211 || time.offsetMinutes == -210 then
                 Ok (ShortName "NST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3614,30 +3614,30 @@ for__america__goose_bay =
 for__america__grand_turk : Zone -> Posix -> Result Int Abbreviation
 for__america__grand_turk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -285 || offsetMinutes == -284 then
+        (\time ->
+            if time.offsetMinutes == -285 || time.offsetMinutes == -284 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok
-                    (if posixSeconds >= 1520751600 then
+                    (if time.posixSeconds >= 1520751600 then
                         ShortName "EDT"
 
-                     else if posixSeconds >= 1425798000 then
+                     else if time.posixSeconds >= 1425798000 then
                         ShortName "AST"
 
                      else
                         ShortName "EDT"
                     )
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
-            else if offsetMinutes == -308 || offsetMinutes == -307 then
+            else if time.offsetMinutes == -308 || time.offsetMinutes == -307 then
                 Ok (ShortName "KMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3646,18 +3646,18 @@ for__america__grand_turk =
 for__america__guatemala : Zone -> Posix -> Result Int Abbreviation
 for__america__guatemala =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -363 || offsetMinutes == -362 then
+        (\time ->
+            if time.offsetMinutes == -363 || time.offsetMinutes == -362 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3666,18 +3666,18 @@ for__america__guatemala =
 for__america__guayaquil : Zone -> Posix -> Result Int Abbreviation
 for__america__guayaquil =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -320 || offsetMinutes == -319 then
+        (\time ->
+            if time.offsetMinutes == -320 || time.offsetMinutes == -319 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 || offsetMinutes == -240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -300 || time.offsetMinutes == -240 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -314 then
+            else if time.offsetMinutes == -314 then
                 Ok (ShortName "QMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3686,15 +3686,15 @@ for__america__guayaquil =
 for__america__guyana : Zone -> Posix -> Result Int Abbreviation
 for__america__guyana =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -233 || offsetMinutes == -232 then
+        (\time ->
+            if time.offsetMinutes == -233 || time.offsetMinutes == -232 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -225 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -225 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3703,30 +3703,30 @@ for__america__guyana =
 for__america__halifax : Zone -> Posix -> Result Int Abbreviation
 for__america__halifax =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -255 || offsetMinutes == -254 then
+        (\time ->
+            if time.offsetMinutes == -255 || time.offsetMinutes == -254 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok
-                    (if posixSeconds >= -747252000 then
+                    (if time.posixSeconds >= -747252000 then
                         ShortName "ADT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "APT"
 
-                     else if posixSeconds >= -880221600 then
+                     else if time.posixSeconds >= -880221600 then
                         ShortName "AWT"
 
                      else
                         ShortName "ADT"
                     )
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3735,24 +3735,24 @@ for__america__halifax =
 for__america__havana : Zone -> Posix -> Result Int Abbreviation
 for__america__havana =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -330 || offsetMinutes == -329 then
+        (\time ->
+            if time.offsetMinutes == -330 || time.offsetMinutes == -329 then
                 Ok
-                    (if posixSeconds >= -2524501832 then
+                    (if time.posixSeconds >= -2524501832 then
                         ShortName "HMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3761,30 +3761,30 @@ for__america__havana =
 for__america__hermosillo : Zone -> Posix -> Result Int Abbreviation
 for__america__hermosillo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -444 || offsetMinutes == -443 then
+        (\time ->
+            if time.offsetMinutes == -444 || time.offsetMinutes == -443 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 828867600 then
+                    (if time.posixSeconds >= 828867600 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -1191344400 then
+                     else if time.posixSeconds >= -1191344400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -1220461200 then
+                     else if time.posixSeconds >= -1220461200 then
                         ShortName "MDT"
 
                      else
                         ShortName "CST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3793,36 +3793,36 @@ for__america__hermosillo =
 for__america__indiana__indianapolis : Zone -> Posix -> Result Int Abbreviation
 for__america__indiana__indianapolis =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -345 || offsetMinutes == -344 then
+        (\time ->
+            if time.offsetMinutes == -345 || time.offsetMinutes == -344 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= -463593600 then
+                    (if time.posixSeconds >= -463593600 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -747244800 then
+                     else if time.posixSeconds >= -747244800 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3831,42 +3831,42 @@ for__america__indiana__indianapolis =
 for__america__indiana__knox : Zone -> Posix -> Result Int Abbreviation
 for__america__indiana__knox =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -347 || offsetMinutes == -346 then
+        (\time ->
+            if time.offsetMinutes == -347 || time.offsetMinutes == -346 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 1143961200 then
+                    (if time.posixSeconds >= 1143961200 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= 688546800 then
+                     else if time.posixSeconds >= 688546800 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -84384000 then
+                     else if time.posixSeconds >= -84384000 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -242236800 then
+                     else if time.posixSeconds >= -242236800 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -715795200 then
+                     else if time.posixSeconds >= -715795200 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3875,42 +3875,42 @@ for__america__indiana__knox =
 for__america__indiana__marengo : Zone -> Posix -> Result Int Abbreviation
 for__america__indiana__marengo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -346 || offsetMinutes == -345 then
+        (\time ->
+            if time.offsetMinutes == -346 || time.offsetMinutes == -345 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 152089200 then
+                    (if time.posixSeconds >= 152089200 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 126687600 then
+                     else if time.posixSeconds >= 126687600 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -273686400 then
+                     else if time.posixSeconds >= -273686400 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -589392000 then
+                     else if time.posixSeconds >= -589392000 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3919,45 +3919,45 @@ for__america__indiana__marengo =
 for__america__indiana__petersburg : Zone -> Posix -> Result Int Abbreviation
 for__america__indiana__petersburg =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -350 || offsetMinutes == -349 then
+        (\time ->
+            if time.offsetMinutes == -350 || time.offsetMinutes == -349 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 1194159600 then
+                    (if time.posixSeconds >= 1194159600 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 1143961200 then
+                     else if time.posixSeconds >= 1143961200 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= 247042800 then
+                     else if time.posixSeconds >= 247042800 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -84384000 then
+                     else if time.posixSeconds >= -84384000 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -147888000 then
+                     else if time.posixSeconds >= -147888000 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -462996000 then
+                     else if time.posixSeconds >= -462996000 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -3966,45 +3966,45 @@ for__america__indiana__petersburg =
 for__america__indiana__tell_city : Zone -> Posix -> Result Int Abbreviation
 for__america__indiana__tell_city =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -348 || offsetMinutes == -347 then
+        (\time ->
+            if time.offsetMinutes == -348 || time.offsetMinutes == -347 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 1143961200 then
+                    (if time.posixSeconds >= 1143961200 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -5767200 then
+                     else if time.posixSeconds >= -5767200 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -52934400 then
+                     else if time.posixSeconds >= -52934400 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -179337600 then
+                     else if time.posixSeconds >= -179337600 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -462996000 then
+                     else if time.posixSeconds >= -462996000 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4013,33 +4013,33 @@ for__america__indiana__tell_city =
 for__america__indiana__vevay : Zone -> Posix -> Result Int Abbreviation
 for__america__indiana__vevay =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -341 || offsetMinutes == -340 then
+        (\time ->
+            if time.offsetMinutes == -341 || time.offsetMinutes == -340 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= -495043200 then
+                    (if time.posixSeconds >= -495043200 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4048,42 +4048,42 @@ for__america__indiana__vevay =
 for__america__indiana__vincennes : Zone -> Posix -> Result Int Abbreviation
 for__america__indiana__vincennes =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -351 || offsetMinutes == -350 then
+        (\time ->
+            if time.offsetMinutes == -351 || time.offsetMinutes == -350 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 1194159600 then
+                    (if time.posixSeconds >= 1194159600 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 1143961200 then
+                     else if time.posixSeconds >= 1143961200 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -179337600 then
+                     else if time.posixSeconds >= -179337600 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -747244800 then
+                     else if time.posixSeconds >= -747244800 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4092,39 +4092,39 @@ for__america__indiana__vincennes =
 for__america__indiana__winamac : Zone -> Posix -> Result Int Abbreviation
 for__america__indiana__winamac =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -347 || offsetMinutes == -346 then
+        (\time ->
+            if time.offsetMinutes == -347 || time.offsetMinutes == -346 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 1143961200 then
+                    (if time.posixSeconds >= 1143961200 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -273686400 then
+                     else if time.posixSeconds >= -273686400 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -747244800 then
+                     else if time.posixSeconds >= -747244800 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4133,27 +4133,27 @@ for__america__indiana__winamac =
 for__america__inuvik : Zone -> Posix -> Result Int Abbreviation
 for__america__inuvik =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 0 then
+        (\time ->
+            if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "MDT")
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= 309945600 then
+                    (if time.posixSeconds >= 309945600 then
                         ShortName "MST"
 
                      else
                         ShortName "PDT"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok (ShortName "PST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4162,31 +4162,31 @@ for__america__inuvik =
 for__america__iqaluit : Zone -> Posix -> Result Int Abbreviation
 for__america__iqaluit =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 0 then
+        (\time ->
+            if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 972802800 then
+                    (if time.posixSeconds >= 972802800 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 954662400 then
+                     else if time.posixSeconds >= 954662400 then
                         ShortName "CDT"
 
                      else
                         ShortName "EST"
                     )
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok
-                    (if posixSeconds >= 73465200 then
+                    (if time.posixSeconds >= 73465200 then
                         ShortName "EDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "EPT"
 
                      else
@@ -4194,7 +4194,7 @@ for__america__iqaluit =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4203,24 +4203,24 @@ for__america__iqaluit =
 for__america__jamaica : Zone -> Posix -> Result Int Abbreviation
 for__america__jamaica =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -308 || offsetMinutes == -307 then
+        (\time ->
+            if time.offsetMinutes == -308 || time.offsetMinutes == -307 then
                 Ok
-                    (if posixSeconds >= -2524503170 then
+                    (if time.posixSeconds >= -2524503170 then
                         ShortName "KMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4229,40 +4229,40 @@ for__america__jamaica =
 for__america__juneau : Zone -> Posix -> Result Int Abbreviation
 for__america__juneau =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -538 || offsetMinutes == -537 || offsetMinutes == 902 || offsetMinutes == 903 then
+        (\time ->
+            if time.offsetMinutes == -538 || time.offsetMinutes == -537 || time.offsetMinutes == 902 || time.offsetMinutes == 903 then
                 Ok Lmt
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok
-                    (if posixSeconds >= 452084400 then
+                    (if time.posixSeconds >= 452084400 then
                         ShortName "AKDT"
 
-                     else if posixSeconds >= 341402400 then
+                     else if time.posixSeconds >= 341402400 then
                         ShortName "PST"
 
-                     else if posixSeconds >= 325677600 then
+                     else if time.posixSeconds >= 325677600 then
                         ShortName "YDT"
 
                      else
                         ShortName "PST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= -21477600 then
+                    (if time.posixSeconds >= -21477600 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "PPT"
 
                      else
                         ShortName "PWT"
                     )
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok
-                    (if posixSeconds >= 439030800 then
+                    (if time.posixSeconds >= 439030800 then
                         ShortName "AKST"
 
                      else
@@ -4270,7 +4270,7 @@ for__america__juneau =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4279,42 +4279,42 @@ for__america__juneau =
 for__america__kentucky__louisville : Zone -> Posix -> Result Int Abbreviation
 for__america__kentucky__louisville =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -344 || offsetMinutes == -343 then
+        (\time ->
+            if time.offsetMinutes == -344 || time.offsetMinutes == -343 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 152089200 then
+                    (if time.posixSeconds >= 152089200 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 126687600 then
+                     else if time.posixSeconds >= 126687600 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -266432400 then
+                     else if time.posixSeconds >= -266432400 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -747251940 then
+                     else if time.posixSeconds >= -747251940 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4323,36 +4323,36 @@ for__america__kentucky__louisville =
 for__america__kentucky__monticello : Zone -> Posix -> Result Int Abbreviation
 for__america__kentucky__monticello =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -340 || offsetMinutes == -339 then
+        (\time ->
+            if time.offsetMinutes == -340 || time.offsetMinutes == -339 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 972802800 then
+                    (if time.posixSeconds >= 972802800 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -52934400 then
+                     else if time.posixSeconds >= -52934400 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4361,24 +4361,24 @@ for__america__kentucky__monticello =
 for__america__la_paz : Zone -> Posix -> Result Int Abbreviation
 for__america__la_paz =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -273 || offsetMinutes == -272 then
+        (\time ->
+            if time.offsetMinutes == -273 || time.offsetMinutes == -272 then
                 Ok
-                    (if posixSeconds >= -2524505244 then
+                    (if time.posixSeconds >= -2524505244 then
                         ShortName "CMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -213 || offsetMinutes == -212 then
+            else if time.offsetMinutes == -213 || time.offsetMinutes == -212 then
                 Ok (ShortName "BST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4387,15 +4387,15 @@ for__america__la_paz =
 for__america__lima : Zone -> Posix -> Result Int Abbreviation
 for__america__lima =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -309 || offsetMinutes == -308 then
+        (\time ->
+            if time.offsetMinutes == -309 || time.offsetMinutes == -308 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 || offsetMinutes == -240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -300 || time.offsetMinutes == -240 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4404,30 +4404,30 @@ for__america__lima =
 for__america__los_angeles : Zone -> Posix -> Result Int Abbreviation
 for__america__los_angeles =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -473 || offsetMinutes == -472 then
+        (\time ->
+            if time.offsetMinutes == -473 || time.offsetMinutes == -472 then
                 Ok Lmt
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= -687967140 then
+                    (if time.posixSeconds >= -687967140 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "PPT"
 
-                     else if posixSeconds >= -880207200 then
+                     else if time.posixSeconds >= -880207200 then
                         ShortName "PWT"
 
                      else
                         ShortName "PDT"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok (ShortName "PST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4436,15 +4436,15 @@ for__america__los_angeles =
 for__america__maceio : Zone -> Posix -> Result Int Abbreviation
 for__america__maceio =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -143 || offsetMinutes == -142 then
+        (\time ->
+            if time.offsetMinutes == -143 || time.offsetMinutes == -142 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4453,28 +4453,28 @@ for__america__maceio =
 for__america__managua : Zone -> Posix -> Result Int Abbreviation
 for__america__managua =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -346 || offsetMinutes == -345 then
+        (\time ->
+            if time.offsetMinutes == -346 || time.offsetMinutes == -345 then
                 Ok
-                    (if posixSeconds >= -2524500892 then
+                    (if time.posixSeconds >= -2524500892 then
                         ShortName "MMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 1113112800 then
+                    (if time.posixSeconds >= 1113112800 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= 694260000 then
+                     else if time.posixSeconds >= 694260000 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 290584800 then
+                     else if time.posixSeconds >= 290584800 then
                         ShortName "CDT"
 
                      else
@@ -4482,7 +4482,7 @@ for__america__managua =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4491,24 +4491,24 @@ for__america__managua =
 for__america__manaus : Zone -> Posix -> Result Int Abbreviation
 for__america__manaus =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -241 then
+        (\time ->
+            if time.offsetMinutes == -241 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok
-                    (if posixSeconds >= -1767211196 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= -1767211196 then
+                        Offset time.offsetMinutes
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4517,24 +4517,24 @@ for__america__manaus =
 for__america__martinique : Zone -> Posix -> Result Int Abbreviation
 for__america__martinique =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -245 || offsetMinutes == -244 then
+        (\time ->
+            if time.offsetMinutes == -245 || time.offsetMinutes == -244 then
                 Ok
-                    (if posixSeconds >= -2524506940 then
+                    (if time.posixSeconds >= -2524506940 then
                         ShortName "FFMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok (ShortName "ADT")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4543,18 +4543,18 @@ for__america__martinique =
 for__america__matamoros : Zone -> Posix -> Result Int Abbreviation
 for__america__matamoros =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -390 then
+        (\time ->
+            if time.offsetMinutes == -390 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4563,30 +4563,30 @@ for__america__matamoros =
 for__america__mazatlan : Zone -> Posix -> Result Int Abbreviation
 for__america__mazatlan =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -426 || offsetMinutes == -425 then
+        (\time ->
+            if time.offsetMinutes == -426 || time.offsetMinutes == -425 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 828867600 then
+                    (if time.posixSeconds >= 828867600 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -1191344400 then
+                     else if time.posixSeconds >= -1191344400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -1220461200 then
+                     else if time.posixSeconds >= -1220461200 then
                         ShortName "MDT"
 
                      else
                         ShortName "CST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4595,36 +4595,36 @@ for__america__mazatlan =
 for__america__menominee : Zone -> Posix -> Result Int Abbreviation
 for__america__menominee =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -351 || offsetMinutes == -350 then
+        (\time ->
+            if time.offsetMinutes == -351 || time.offsetMinutes == -350 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 104914800 then
+                    (if time.posixSeconds >= 104914800 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -21484800 then
+                     else if time.posixSeconds >= -21484800 then
                         ShortName "EST"
 
-                     else if posixSeconds >= -747244800 then
+                     else if time.posixSeconds >= -747244800 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4633,16 +4633,16 @@ for__america__menominee =
 for__america__merida : Zone -> Posix -> Result Int Abbreviation
 for__america__merida =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -359 || offsetMinutes == -358 then
+        (\time ->
+            if time.offsetMinutes == -359 || time.offsetMinutes == -358 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 828864000 then
+                    (if time.posixSeconds >= 828864000 then
                         ShortName "CDT"
 
                      else
@@ -4650,7 +4650,7 @@ for__america__merida =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4659,31 +4659,31 @@ for__america__merida =
 for__america__metlakatla : Zone -> Posix -> Result Int Abbreviation
 for__america__metlakatla =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -527 || offsetMinutes == -526 || offsetMinutes == 913 || offsetMinutes == 914 then
+        (\time ->
+            if time.offsetMinutes == -527 || time.offsetMinutes == -526 || time.offsetMinutes == 913 || time.offsetMinutes == 914 then
                 Ok Lmt
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok (ShortName "AKST")
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok
-                    (if posixSeconds >= 1541325600 then
+                    (if time.posixSeconds >= 1541325600 then
                         ShortName "PST"
 
-                     else if posixSeconds >= 1457866800 then
+                     else if time.posixSeconds >= 1457866800 then
                         ShortName "AKDT"
 
                      else
                         ShortName "PST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= -21477600 then
+                    (if time.posixSeconds >= -21477600 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "PPT"
 
                      else
@@ -4691,7 +4691,7 @@ for__america__metlakatla =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4700,39 +4700,39 @@ for__america__metlakatla =
 for__america__mexico_city : Zone -> Posix -> Result Int Abbreviation
 for__america__mexico_city =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -397 || offsetMinutes == -396 then
+        (\time ->
+            if time.offsetMinutes == -397 || time.offsetMinutes == -396 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= -627501600 then
+                    (if time.posixSeconds >= -627501600 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -821901600 then
+                     else if time.posixSeconds >= -821901600 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= -1191344400 then
+                    (if time.posixSeconds >= -1191344400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -1220461200 then
+                     else if time.posixSeconds >= -1220461200 then
                         ShortName "MDT"
 
                      else
                         ShortName "CST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4741,18 +4741,18 @@ for__america__mexico_city =
 for__america__miquelon : Zone -> Posix -> Result Int Abbreviation
 for__america__miquelon =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -225 || offsetMinutes == -224 then
+        (\time ->
+            if time.offsetMinutes == -225 || time.offsetMinutes == -224 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4761,33 +4761,33 @@ for__america__miquelon =
 for__america__moncton : Zone -> Posix -> Result Int Abbreviation
 for__america__moncton =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -260 || offsetMinutes == -259 then
+        (\time ->
+            if time.offsetMinutes == -260 || time.offsetMinutes == -259 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok
-                    (if posixSeconds >= -747252000 then
+                    (if time.posixSeconds >= -747252000 then
                         ShortName "ADT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "APT"
 
-                     else if posixSeconds >= -880221600 then
+                     else if time.posixSeconds >= -880221600 then
                         ShortName "AWT"
 
                      else
                         ShortName "ADT"
                     )
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4796,30 +4796,30 @@ for__america__moncton =
 for__america__monterrey : Zone -> Posix -> Result Int Abbreviation
 for__america__monterrey =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -402 || offsetMinutes == -401 then
+        (\time ->
+            if time.offsetMinutes == -402 || time.offsetMinutes == -401 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= -1191344400 then
+                    (if time.posixSeconds >= -1191344400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -1220461200 then
+                     else if time.posixSeconds >= -1220461200 then
                         ShortName "MDT"
 
                      else
                         ShortName "CST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4828,21 +4828,21 @@ for__america__monterrey =
 for__america__montevideo : Zone -> Posix -> Result Int Abbreviation
 for__america__montevideo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -225 || offsetMinutes == -224 then
+        (\time ->
+            if time.offsetMinutes == -225 || time.offsetMinutes == -224 then
                 Ok
-                    (if posixSeconds >= -1942690509 then
+                    (if time.posixSeconds >= -1942690509 then
                         ShortName "MMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -240 || offsetMinutes == -210 || offsetMinutes == -180 || offsetMinutes == -150 || offsetMinutes == -120 || offsetMinutes == -90 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -210 || time.offsetMinutes == -180 || time.offsetMinutes == -150 || time.offsetMinutes == -120 || time.offsetMinutes == -90 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4851,30 +4851,30 @@ for__america__montevideo =
 for__america__new_york : Zone -> Posix -> Result Int Abbreviation
 for__america__new_york =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -297 || offsetMinutes == -296 then
+        (\time ->
+            if time.offsetMinutes == -297 || time.offsetMinutes == -296 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok
-                    (if posixSeconds >= -747248400 then
+                    (if time.posixSeconds >= -747248400 then
                         ShortName "EDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "EPT"
 
-                     else if posixSeconds >= -880218000 then
+                     else if time.posixSeconds >= -880218000 then
                         ShortName "EWT"
 
                      else
                         ShortName "EDT"
                     )
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4883,37 +4883,37 @@ for__america__new_york =
 for__america__nome : Zone -> Posix -> Result Int Abbreviation
 for__america__nome =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -662 || offsetMinutes == -661 || offsetMinutes == 778 || offsetMinutes == 779 then
+        (\time ->
+            if time.offsetMinutes == -662 || time.offsetMinutes == -661 || time.offsetMinutes == 778 || time.offsetMinutes == 779 then
                 Ok Lmt
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok (ShortName "AKDT")
 
-            else if offsetMinutes == -660 then
+            else if time.offsetMinutes == -660 then
                 Ok
-                    (if posixSeconds >= -86878800 then
+                    (if time.posixSeconds >= -86878800 then
                         ShortName "BST"
 
                      else
                         ShortName "NST"
                     )
 
-            else if offsetMinutes == -600 then
+            else if time.offsetMinutes == -600 then
                 Ok
-                    (if posixSeconds >= -21466800 then
+                    (if time.posixSeconds >= -21466800 then
                         ShortName "BDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "NPT"
 
                      else
                         ShortName "NWT"
                     )
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok
-                    (if posixSeconds >= 439030800 then
+                    (if time.posixSeconds >= 439030800 then
                         ShortName "AKST"
 
                      else
@@ -4921,7 +4921,7 @@ for__america__nome =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4930,15 +4930,15 @@ for__america__nome =
 for__america__noronha : Zone -> Posix -> Result Int Abbreviation
 for__america__noronha =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -130 || offsetMinutes == -129 then
+        (\time ->
+            if time.offsetMinutes == -130 || time.offsetMinutes == -129 then
                 Ok Lmt
 
-            else if offsetMinutes == -120 || offsetMinutes == -60 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -120 || time.offsetMinutes == -60 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4947,33 +4947,33 @@ for__america__noronha =
 for__america__north_dakota__beulah : Zone -> Posix -> Result Int Abbreviation
 for__america__north_dakota__beulah =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -408 || offsetMinutes == -407 then
+        (\time ->
+            if time.offsetMinutes == -408 || time.offsetMinutes == -407 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 1289116800 then
+                    (if time.posixSeconds >= 1289116800 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -84380400 then
+                     else if time.posixSeconds >= -84380400 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
-                     else if posixSeconds >= -880210800 then
+                     else if time.posixSeconds >= -880210800 then
                         ShortName "MWT"
 
                      else
                         ShortName "MDT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -4982,36 +4982,36 @@ for__america__north_dakota__beulah =
 for__america__north_dakota__center : Zone -> Posix -> Result Int Abbreviation
 for__america__north_dakota__center =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -406 || offsetMinutes == -405 then
+        (\time ->
+            if time.offsetMinutes == -406 || time.offsetMinutes == -405 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 720000000 then
+                    (if time.posixSeconds >= 720000000 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -84380400 then
+                     else if time.posixSeconds >= -84380400 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
-                     else if posixSeconds >= -880210800 then
+                     else if time.posixSeconds >= -880210800 then
                         ShortName "MWT"
 
                      else
                         ShortName "MDT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5020,36 +5020,36 @@ for__america__north_dakota__center =
 for__america__north_dakota__new_salem : Zone -> Posix -> Result Int Abbreviation
 for__america__north_dakota__new_salem =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -406 || offsetMinutes == -405 then
+        (\time ->
+            if time.offsetMinutes == -406 || time.offsetMinutes == -405 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 1067155200 then
+                    (if time.posixSeconds >= 1067155200 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -84380400 then
+                     else if time.posixSeconds >= -84380400 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
-                     else if posixSeconds >= -880210800 then
+                     else if time.posixSeconds >= -880210800 then
                         ShortName "MWT"
 
                      else
                         ShortName "MDT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5058,15 +5058,15 @@ for__america__north_dakota__new_salem =
 for__america__nuuk : Zone -> Posix -> Result Int Abbreviation
 for__america__nuuk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -207 || offsetMinutes == -206 then
+        (\time ->
+            if time.offsetMinutes == -207 || time.offsetMinutes == -206 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5075,36 +5075,36 @@ for__america__nuuk =
 for__america__ojinaga : Zone -> Posix -> Result Int Abbreviation
 for__america__ojinaga =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -418 || offsetMinutes == -417 then
+        (\time ->
+            if time.offsetMinutes == -418 || time.offsetMinutes == -417 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 1667116800 then
+                    (if time.posixSeconds >= 1667116800 then
                         ShortName "CST"
 
-                     else if posixSeconds >= 891766800 then
+                     else if time.posixSeconds >= 891766800 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -1191344400 then
+                     else if time.posixSeconds >= -1191344400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -1220461200 then
+                     else if time.posixSeconds >= -1220461200 then
                         ShortName "MDT"
 
                      else
                         ShortName "CST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5113,27 +5113,27 @@ for__america__ojinaga =
 for__america__panama : Zone -> Posix -> Result Int Abbreviation
 for__america__panama =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -318 then
+        (\time ->
+            if time.offsetMinutes == -318 then
                 Ok Lmt
 
-            else if offsetMinutes == -319 then
+            else if time.offsetMinutes == -319 then
                 Ok
-                    (if posixSeconds >= -2524502512 then
+                    (if time.posixSeconds >= -2524502512 then
                         ShortName "CMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -320 then
+            else if time.offsetMinutes == -320 then
                 Ok (ShortName "CMT")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5142,21 +5142,21 @@ for__america__panama =
 for__america__paramaribo : Zone -> Posix -> Result Int Abbreviation
 for__america__paramaribo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -221 || offsetMinutes == -220 then
+        (\time ->
+            if time.offsetMinutes == -221 || time.offsetMinutes == -220 then
                 Ok
-                    (if posixSeconds >= -1861906760 then
+                    (if time.posixSeconds >= -1861906760 then
                         ShortName "PMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -210 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -210 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5165,27 +5165,27 @@ for__america__paramaribo =
 for__america__phoenix : Zone -> Posix -> Result Int Abbreviation
 for__america__phoenix =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -449 || offsetMinutes == -448 then
+        (\time ->
+            if time.offsetMinutes == -449 || time.offsetMinutes == -448 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= -84380400 then
+                    (if time.posixSeconds >= -84380400 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -880210800 then
+                     else if time.posixSeconds >= -880210800 then
                         ShortName "MWT"
 
                      else
                         ShortName "MDT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5194,27 +5194,27 @@ for__america__phoenix =
 for__america__port_au_prince : Zone -> Posix -> Result Int Abbreviation
 for__america__port_au_prince =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -290 then
+        (\time ->
+            if time.offsetMinutes == -290 then
                 Ok Lmt
 
-            else if offsetMinutes == -289 then
+            else if time.offsetMinutes == -289 then
                 Ok
-                    (if posixSeconds >= -2524504240 then
+                    (if time.posixSeconds >= -2524504240 then
                         ShortName "PPMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "EDT")
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5223,15 +5223,15 @@ for__america__port_au_prince =
 for__america__porto_velho : Zone -> Posix -> Result Int Abbreviation
 for__america__porto_velho =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -256 || offsetMinutes == -255 then
+        (\time ->
+            if time.offsetMinutes == -256 || time.offsetMinutes == -255 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5240,16 +5240,16 @@ for__america__porto_velho =
 for__america__puerto_rico : Zone -> Posix -> Result Int Abbreviation
 for__america__puerto_rico =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -265 || offsetMinutes == -264 then
+        (\time ->
+            if time.offsetMinutes == -265 || time.offsetMinutes == -264 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok
-                    (if posixSeconds >= -769395600 then
+                    (if time.posixSeconds >= -769395600 then
                         ShortName "APT"
 
                      else
@@ -5257,7 +5257,7 @@ for__america__puerto_rico =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5266,27 +5266,27 @@ for__america__puerto_rico =
 for__america__punta_arenas : Zone -> Posix -> Result Int Abbreviation
 for__america__punta_arenas =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -284 then
+        (\time ->
+            if time.offsetMinutes == -284 then
                 Ok Lmt
 
-            else if offsetMinutes == -283 then
+            else if time.offsetMinutes == -283 then
                 Ok
-                    (if posixSeconds >= -2524504580 then
+                    (if time.posixSeconds >= -2524504580 then
                         ShortName "SMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -300 || offsetMinutes == -240 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -300 || time.offsetMinutes == -240 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -282 then
+            else if time.offsetMinutes == -282 then
                 Ok (ShortName "SMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5295,27 +5295,27 @@ for__america__punta_arenas =
 for__america__rankin_inlet : Zone -> Posix -> Result Int Abbreviation
 for__america__rankin_inlet =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 0 then
+        (\time ->
+            if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 986112000 then
+                    (if time.posixSeconds >= 986112000 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= 972802800 then
+                     else if time.posixSeconds >= 972802800 then
                         ShortName "EST"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5324,15 +5324,15 @@ for__america__rankin_inlet =
 for__america__recife : Zone -> Posix -> Result Int Abbreviation
 for__america__recife =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -140 || offsetMinutes == -139 then
+        (\time ->
+            if time.offsetMinutes == -140 || time.offsetMinutes == -139 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5341,33 +5341,33 @@ for__america__recife =
 for__america__regina : Zone -> Posix -> Result Int Abbreviation
 for__america__regina =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -419 || offsetMinutes == -418 then
+        (\time ->
+            if time.offsetMinutes == -419 || time.offsetMinutes == -418 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= -305737200 then
+                    (if time.posixSeconds >= -305737200 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -748450800 then
+                     else if time.posixSeconds >= -748450800 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
-                     else if posixSeconds >= -880210800 then
+                     else if time.posixSeconds >= -880210800 then
                         ShortName "MWT"
 
                      else
                         ShortName "MDT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5376,33 +5376,33 @@ for__america__regina =
 for__america__resolute : Zone -> Posix -> Result Int Abbreviation
 for__america__resolute =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 0 then
+        (\time ->
+            if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= 1173600000 then
+                    (if time.posixSeconds >= 1173600000 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= 1162105200 then
+                     else if time.posixSeconds >= 1162105200 then
                         ShortName "EST"
 
-                     else if posixSeconds >= 986112000 then
+                     else if time.posixSeconds >= 986112000 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= 972802800 then
+                     else if time.posixSeconds >= 972802800 then
                         ShortName "EST"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5411,15 +5411,15 @@ for__america__resolute =
 for__america__rio_branco : Zone -> Posix -> Result Int Abbreviation
 for__america__rio_branco =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -272 || offsetMinutes == -271 then
+        (\time ->
+            if time.offsetMinutes == -272 || time.offsetMinutes == -271 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 || offsetMinutes == -240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -300 || time.offsetMinutes == -240 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5435,21 +5435,21 @@ for__america__santarem =
 for__america__santiago : Zone -> Posix -> Result Int Abbreviation
 for__america__santiago =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -283 || offsetMinutes == -282 then
+        (\time ->
+            if time.offsetMinutes == -283 || time.offsetMinutes == -282 then
                 Ok
-                    (if posixSeconds >= -2524504635 then
+                    (if time.posixSeconds >= -2524504635 then
                         ShortName "SMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -300 || offsetMinutes == -240 || offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -300 || time.offsetMinutes == -240 || time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5458,36 +5458,36 @@ for__america__santiago =
 for__america__santo_domingo : Zone -> Posix -> Result Int Abbreviation
 for__america__santo_domingo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -279 then
+        (\time ->
+            if time.offsetMinutes == -279 then
                 Ok Lmt
 
-            else if offsetMinutes == -280 then
+            else if time.offsetMinutes == -280 then
                 Ok
-                    (if posixSeconds >= -2524504824 then
+                    (if time.posixSeconds >= -2524504824 then
                         ShortName "SDMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -270 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -270 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok
-                    (if posixSeconds >= 152082000 then
+                    (if time.posixSeconds >= 152082000 then
                         ShortName "AST"
 
                      else
                         ShortName "EDT"
                     )
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5496,15 +5496,15 @@ for__america__santo_domingo =
 for__america__sao_paulo : Zone -> Posix -> Result Int Abbreviation
 for__america__sao_paulo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -187 || offsetMinutes == -186 then
+        (\time ->
+            if time.offsetMinutes == -187 || time.offsetMinutes == -186 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5513,15 +5513,15 @@ for__america__sao_paulo =
 for__america__scoresbysund : Zone -> Posix -> Result Int Abbreviation
 for__america__scoresbysund =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -88 || offsetMinutes == -87 then
+        (\time ->
+            if time.offsetMinutes == -88 || time.offsetMinutes == -87 then
                 Ok Lmt
 
-            else if offsetMinutes == -120 || offsetMinutes == -60 || offsetMinutes == 0 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -120 || time.offsetMinutes == -60 || time.offsetMinutes == 0 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5530,34 +5530,34 @@ for__america__scoresbysund =
 for__america__sitka : Zone -> Posix -> Result Int Abbreviation
 for__america__sitka =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -542 || offsetMinutes == -541 || offsetMinutes == 898 || offsetMinutes == 899 then
+        (\time ->
+            if time.offsetMinutes == -542 || time.offsetMinutes == -541 || time.offsetMinutes == 898 || time.offsetMinutes == 899 then
                 Ok Lmt
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok
-                    (if posixSeconds >= 452084400 then
+                    (if time.posixSeconds >= 452084400 then
                         ShortName "AKDT"
 
                      else
                         ShortName "PST"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= -21477600 then
+                    (if time.posixSeconds >= -21477600 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "PPT"
 
                      else
                         ShortName "PWT"
                     )
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok
-                    (if posixSeconds >= 439030800 then
+                    (if time.posixSeconds >= 439030800 then
                         ShortName "AKST"
 
                      else
@@ -5565,7 +5565,7 @@ for__america__sitka =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5574,31 +5574,31 @@ for__america__sitka =
 for__america__st_johns : Zone -> Posix -> Result Int Abbreviation
 for__america__st_johns =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -211 || offsetMinutes == -210 then
+        (\time ->
+            if time.offsetMinutes == -211 || time.offsetMinutes == -210 then
                 Ok
-                    (if posixSeconds >= -2713897748 then
+                    (if time.posixSeconds >= -2713897748 then
                         ShortName "NST"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -90 then
+            else if time.offsetMinutes == -90 then
                 Ok (ShortName "NDDT")
 
-            else if offsetMinutes == -151 then
+            else if time.offsetMinutes == -151 then
                 Ok (ShortName "NDT")
 
-            else if offsetMinutes == -150 then
+            else if time.offsetMinutes == -150 then
                 Ok
-                    (if posixSeconds >= -746044200 then
+                    (if time.posixSeconds >= -746044200 then
                         ShortName "NDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "NPT"
 
-                     else if posixSeconds >= -872368200 then
+                     else if time.posixSeconds >= -872368200 then
                         ShortName "NWT"
 
                      else
@@ -5606,7 +5606,7 @@ for__america__st_johns =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5615,33 +5615,33 @@ for__america__st_johns =
 for__america__swift_current : Zone -> Posix -> Result Int Abbreviation
 for__america__swift_current =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -432 || offsetMinutes == -431 then
+        (\time ->
+            if time.offsetMinutes == -432 || time.offsetMinutes == -431 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok
-                    (if posixSeconds >= 73472400 then
+                    (if time.posixSeconds >= 73472400 then
                         ShortName "CST"
 
-                     else if posixSeconds >= -747241200 then
+                     else if time.posixSeconds >= -747241200 then
                         ShortName "MDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "MPT"
 
-                     else if posixSeconds >= -880210800 then
+                     else if time.posixSeconds >= -880210800 then
                         ShortName "MWT"
 
                      else
                         ShortName "MDT"
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5650,18 +5650,18 @@ for__america__swift_current =
 for__america__tegucigalpa : Zone -> Posix -> Result Int Abbreviation
 for__america__tegucigalpa =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -349 || offsetMinutes == -348 then
+        (\time ->
+            if time.offsetMinutes == -349 || time.offsetMinutes == -348 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5670,18 +5670,18 @@ for__america__tegucigalpa =
 for__america__thule : Zone -> Posix -> Result Int Abbreviation
 for__america__thule =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -276 || offsetMinutes == -275 then
+        (\time ->
+            if time.offsetMinutes == -276 || time.offsetMinutes == -275 then
                 Ok Lmt
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok (ShortName "ADT")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5690,33 +5690,33 @@ for__america__thule =
 for__america__tijuana : Zone -> Posix -> Result Int Abbreviation
 for__america__tijuana =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -469 || offsetMinutes == -468 then
+        (\time ->
+            if time.offsetMinutes == -469 || time.offsetMinutes == -468 then
                 Ok Lmt
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= -686073600 then
+                    (if time.posixSeconds >= -686073600 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "PPT"
 
-                     else if posixSeconds >= -873820800 then
+                     else if time.posixSeconds >= -873820800 then
                         ShortName "PWT"
 
-                     else if posixSeconds >= -1222963200 then
+                     else if time.posixSeconds >= -1222963200 then
                         ShortName "PDT"
 
                      else
                         ShortName "MST"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok (ShortName "PST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5725,30 +5725,30 @@ for__america__tijuana =
 for__america__toronto : Zone -> Posix -> Result Int Abbreviation
 for__america__toronto =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -318 || offsetMinutes == -317 then
+        (\time ->
+            if time.offsetMinutes == -318 || time.offsetMinutes == -317 then
                 Ok Lmt
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok
-                    (if posixSeconds >= -747248400 then
+                    (if time.posixSeconds >= -747248400 then
                         ShortName "EDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "EPT"
 
-                     else if posixSeconds >= -880218000 then
+                     else if time.posixSeconds >= -880218000 then
                         ShortName "EWT"
 
                      else
                         ShortName "EDT"
                     )
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok (ShortName "EST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5757,30 +5757,30 @@ for__america__toronto =
 for__america__vancouver : Zone -> Posix -> Result Int Abbreviation
 for__america__vancouver =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -493 || offsetMinutes == -492 then
+        (\time ->
+            if time.offsetMinutes == -493 || time.offsetMinutes == -492 then
                 Ok Lmt
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= -747237600 then
+                    (if time.posixSeconds >= -747237600 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "PPT"
 
-                     else if posixSeconds >= -880207200 then
+                     else if time.posixSeconds >= -880207200 then
                         ShortName "PWT"
 
                      else
                         ShortName "PDT"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok (ShortName "PST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5789,40 +5789,40 @@ for__america__vancouver =
 for__america__whitehorse : Zone -> Posix -> Result Int Abbreviation
 for__america__whitehorse =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -541 then
+        (\time ->
+            if time.offsetMinutes == -541 then
                 Ok Lmt
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok
-                    (if posixSeconds >= -2188997988 then
+                    (if time.posixSeconds >= -2188997988 then
                         ShortName "YST"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -420 then
+            else if time.offsetMinutes == -420 then
                 Ok
-                    (if posixSeconds >= 1604214000 then
+                    (if time.posixSeconds >= 1604214000 then
                         ShortName "MST"
 
-                     else if posixSeconds >= 325677600 then
+                     else if time.posixSeconds >= 325677600 then
                         ShortName "PDT"
 
                      else
                         ShortName "YDDT"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok
-                    (if posixSeconds >= -121273200 then
+                    (if time.posixSeconds >= -121273200 then
                         ShortName "PST"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "YPT"
 
-                     else if posixSeconds >= -880203600 then
+                     else if time.posixSeconds >= -880203600 then
                         ShortName "YWT"
 
                      else
@@ -5830,7 +5830,7 @@ for__america__whitehorse =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5839,30 +5839,30 @@ for__america__whitehorse =
 for__america__winnipeg : Zone -> Posix -> Result Int Abbreviation
 for__america__winnipeg =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -389 || offsetMinutes == -388 then
+        (\time ->
+            if time.offsetMinutes == -389 || time.offsetMinutes == -388 then
                 Ok Lmt
 
-            else if offsetMinutes == -300 then
+            else if time.offsetMinutes == -300 then
                 Ok
-                    (if posixSeconds >= -746035200 then
+                    (if time.posixSeconds >= -746035200 then
                         ShortName "CDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "CPT"
 
-                     else if posixSeconds >= -880214400 then
+                     else if time.posixSeconds >= -880214400 then
                         ShortName "CWT"
 
                      else
                         ShortName "CDT"
                     )
 
-            else if offsetMinutes == -360 then
+            else if time.offsetMinutes == -360 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5871,28 +5871,28 @@ for__america__winnipeg =
 for__america__yakutat : Zone -> Posix -> Result Int Abbreviation
 for__america__yakutat =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -559 || offsetMinutes == -558 || offsetMinutes == 881 || offsetMinutes == 882 then
+        (\time ->
+            if time.offsetMinutes == -559 || time.offsetMinutes == -558 || time.offsetMinutes == 881 || time.offsetMinutes == 882 then
                 Ok Lmt
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok
-                    (if posixSeconds >= 439030800 then
+                    (if time.posixSeconds >= 439030800 then
                         ShortName "AKST"
 
                      else
                         ShortName "YST"
                     )
 
-            else if offsetMinutes == -480 then
+            else if time.offsetMinutes == -480 then
                 Ok
-                    (if posixSeconds >= 452084400 then
+                    (if time.posixSeconds >= 452084400 then
                         ShortName "AKDT"
 
-                     else if posixSeconds >= -21474000 then
+                     else if time.posixSeconds >= -21474000 then
                         ShortName "YDT"
 
-                     else if posixSeconds >= -769395600 then
+                     else if time.posixSeconds >= -769395600 then
                         ShortName "YPT"
 
                      else
@@ -5900,7 +5900,7 @@ for__america__yakutat =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5909,15 +5909,15 @@ for__america__yakutat =
 for__antarctica__casey : Zone -> Posix -> Result Int Abbreviation
 for__antarctica__casey =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 480 || offsetMinutes == 660 then
-                Ok (Offset offsetMinutes)
+        (\time ->
+            if time.offsetMinutes == 480 || time.offsetMinutes == 660 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5926,15 +5926,15 @@ for__antarctica__casey =
 for__antarctica__davis : Zone -> Posix -> Result Int Abbreviation
 for__antarctica__davis =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 300 || offsetMinutes == 420 then
-                Ok (Offset offsetMinutes)
+        (\time ->
+            if time.offsetMinutes == 300 || time.offsetMinutes == 420 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5943,18 +5943,18 @@ for__antarctica__davis =
 for__antarctica__macquarie : Zone -> Posix -> Result Int Abbreviation
 for__antarctica__macquarie =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 0 then
+        (\time ->
+            if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
-            else if offsetMinutes == 660 then
+            else if time.offsetMinutes == 660 then
                 Ok (ShortName "AEDT")
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "AEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5963,15 +5963,15 @@ for__antarctica__macquarie =
 for__antarctica__mawson : Zone -> Posix -> Result Int Abbreviation
 for__antarctica__mawson =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+        (\time ->
+            if time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5980,15 +5980,15 @@ for__antarctica__mawson =
 for__antarctica__palmer : Zone -> Posix -> Result Int Abbreviation
 for__antarctica__palmer =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+        (\time ->
+            if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -5997,15 +5997,15 @@ for__antarctica__palmer =
 for__antarctica__rothera : Zone -> Posix -> Result Int Abbreviation
 for__antarctica__rothera =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -180 then
-                Ok (Offset offsetMinutes)
+        (\time ->
+            if time.offsetMinutes == -180 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6014,18 +6014,18 @@ for__antarctica__rothera =
 for__antarctica__troll : Zone -> Posix -> Result Int Abbreviation
 for__antarctica__troll =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 0 then
+        (\time ->
+            if time.offsetMinutes == 0 then
                 Ok
-                    (if posixSeconds >= 1108166400 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 1108166400 then
+                        Offset time.offsetMinutes
 
                      else
                         Uninhabited
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6041,15 +6041,15 @@ for__antarctica__vostok =
 for__asia__almaty : Zone -> Posix -> Result Int Abbreviation
 for__asia__almaty =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 307 || offsetMinutes == 308 then
+        (\time ->
+            if time.offsetMinutes == 307 || time.offsetMinutes == 308 then
                 Ok Lmt
 
-            else if offsetMinutes == 300 || offsetMinutes == 360 || offsetMinutes == 420 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 || time.offsetMinutes == 360 || time.offsetMinutes == 420 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6058,24 +6058,24 @@ for__asia__almaty =
 for__asia__amman : Zone -> Posix -> Result Int Abbreviation
 for__asia__amman =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 143 || offsetMinutes == 144 then
+        (\time ->
+            if time.offsetMinutes == 143 || time.offsetMinutes == 144 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 1666908000 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 1666908000 then
+                        Offset time.offsetMinutes
 
                      else
                         ShortName "EEST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6084,15 +6084,15 @@ for__asia__amman =
 for__asia__anadyr : Zone -> Posix -> Result Int Abbreviation
 for__asia__anadyr =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 709 || offsetMinutes == 710 then
+        (\time ->
+            if time.offsetMinutes == 709 || time.offsetMinutes == 710 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 || offsetMinutes == 720 || offsetMinutes == 780 || offsetMinutes == 840 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 660 || time.offsetMinutes == 720 || time.offsetMinutes == 780 || time.offsetMinutes == 840 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6101,15 +6101,15 @@ for__asia__anadyr =
 for__asia__aqtau : Zone -> Posix -> Result Int Abbreviation
 for__asia__aqtau =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 201 || offsetMinutes == 202 then
+        (\time ->
+            if time.offsetMinutes == 201 || time.offsetMinutes == 202 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6118,15 +6118,15 @@ for__asia__aqtau =
 for__asia__aqtobe : Zone -> Posix -> Result Int Abbreviation
 for__asia__aqtobe =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 228 || offsetMinutes == 229 then
+        (\time ->
+            if time.offsetMinutes == 228 || time.offsetMinutes == 229 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6135,15 +6135,15 @@ for__asia__aqtobe =
 for__asia__ashgabat : Zone -> Posix -> Result Int Abbreviation
 for__asia__ashgabat =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 233 || offsetMinutes == 234 then
+        (\time ->
+            if time.offsetMinutes == 233 || time.offsetMinutes == 234 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6152,15 +6152,15 @@ for__asia__ashgabat =
 for__asia__atyrau : Zone -> Posix -> Result Int Abbreviation
 for__asia__atyrau =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 207 || offsetMinutes == 208 then
+        (\time ->
+            if time.offsetMinutes == 207 || time.offsetMinutes == 208 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6169,21 +6169,21 @@ for__asia__atyrau =
 for__asia__baghdad : Zone -> Posix -> Result Int Abbreviation
 for__asia__baghdad =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 177 || offsetMinutes == 178 then
+        (\time ->
+            if time.offsetMinutes == 177 || time.offsetMinutes == 178 then
                 Ok
-                    (if posixSeconds >= -2524532260 then
+                    (if time.posixSeconds >= -2524532260 then
                         ShortName "BMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6192,15 +6192,15 @@ for__asia__baghdad =
 for__asia__baku : Zone -> Posix -> Result Int Abbreviation
 for__asia__baku =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 199 || offsetMinutes == 200 then
+        (\time ->
+            if time.offsetMinutes == 199 || time.offsetMinutes == 200 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6209,21 +6209,21 @@ for__asia__baku =
 for__asia__bangkok : Zone -> Posix -> Result Int Abbreviation
 for__asia__bangkok =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 402 || offsetMinutes == 403 then
+        (\time ->
+            if time.offsetMinutes == 402 || time.offsetMinutes == 403 then
                 Ok
-                    (if posixSeconds >= -2840164924 then
+                    (if time.posixSeconds >= -2840164924 then
                         ShortName "BMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 420 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 420 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6232,15 +6232,15 @@ for__asia__bangkok =
 for__asia__barnaul : Zone -> Posix -> Result Int Abbreviation
 for__asia__barnaul =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 335 then
+        (\time ->
+            if time.offsetMinutes == 335 then
                 Ok Lmt
 
-            else if offsetMinutes == 360 || offsetMinutes == 420 || offsetMinutes == 480 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 360 || time.offsetMinutes == 420 || time.offsetMinutes == 480 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6249,18 +6249,18 @@ for__asia__barnaul =
 for__asia__beirut : Zone -> Posix -> Result Int Abbreviation
 for__asia__beirut =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 142 then
+        (\time ->
+            if time.offsetMinutes == 142 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EEST")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6269,15 +6269,15 @@ for__asia__beirut =
 for__asia__bishkek : Zone -> Posix -> Result Int Abbreviation
 for__asia__bishkek =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 298 || offsetMinutes == 299 then
+        (\time ->
+            if time.offsetMinutes == 298 || time.offsetMinutes == 299 then
                 Ok Lmt
 
-            else if offsetMinutes == 300 || offsetMinutes == 360 || offsetMinutes == 420 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 || time.offsetMinutes == 360 || time.offsetMinutes == 420 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6286,15 +6286,15 @@ for__asia__bishkek =
 for__asia__chita : Zone -> Posix -> Result Int Abbreviation
 for__asia__chita =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 453 || offsetMinutes == 454 then
+        (\time ->
+            if time.offsetMinutes == 453 || time.offsetMinutes == 454 then
                 Ok Lmt
 
-            else if offsetMinutes == 480 || offsetMinutes == 540 || offsetMinutes == 600 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 480 || time.offsetMinutes == 540 || time.offsetMinutes == 600 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6303,21 +6303,21 @@ for__asia__chita =
 for__asia__colombo : Zone -> Posix -> Result Int Abbreviation
 for__asia__colombo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 319 || offsetMinutes == 320 then
+        (\time ->
+            if time.offsetMinutes == 319 || time.offsetMinutes == 320 then
                 Ok
-                    (if posixSeconds >= -2840159964 then
+                    (if time.posixSeconds >= -2840159964 then
                         ShortName "MMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 330 || offsetMinutes == 360 || offsetMinutes == 390 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 330 || time.offsetMinutes == 360 || time.offsetMinutes == 390 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6326,24 +6326,24 @@ for__asia__colombo =
 for__asia__damascus : Zone -> Posix -> Result Int Abbreviation
 for__asia__damascus =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 145 || offsetMinutes == 146 then
+        (\time ->
+            if time.offsetMinutes == 145 || time.offsetMinutes == 146 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 1666904400 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 1666904400 then
+                        Offset time.offsetMinutes
 
                      else
                         ShortName "EEST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6352,18 +6352,18 @@ for__asia__damascus =
 for__asia__dhaka : Zone -> Posix -> Result Int Abbreviation
 for__asia__dhaka =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 361 || offsetMinutes == 362 then
+        (\time ->
+            if time.offsetMinutes == 361 || time.offsetMinutes == 362 then
                 Ok Lmt
 
-            else if offsetMinutes == 330 || offsetMinutes == 360 || offsetMinutes == 390 || offsetMinutes == 420 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 330 || time.offsetMinutes == 360 || time.offsetMinutes == 390 || time.offsetMinutes == 420 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 353 || offsetMinutes == 354 then
+            else if time.offsetMinutes == 353 || time.offsetMinutes == 354 then
                 Ok (ShortName "HMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6372,15 +6372,15 @@ for__asia__dhaka =
 for__asia__dili : Zone -> Posix -> Result Int Abbreviation
 for__asia__dili =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 502 || offsetMinutes == 503 then
+        (\time ->
+            if time.offsetMinutes == 502 || time.offsetMinutes == 503 then
                 Ok Lmt
 
-            else if offsetMinutes == 480 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 480 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6389,15 +6389,15 @@ for__asia__dili =
 for__asia__dubai : Zone -> Posix -> Result Int Abbreviation
 for__asia__dubai =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 221 || offsetMinutes == 222 then
+        (\time ->
+            if time.offsetMinutes == 221 || time.offsetMinutes == 222 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6406,15 +6406,15 @@ for__asia__dubai =
 for__asia__dushanbe : Zone -> Posix -> Result Int Abbreviation
 for__asia__dushanbe =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 275 || offsetMinutes == 276 then
+        (\time ->
+            if time.offsetMinutes == 275 || time.offsetMinutes == 276 then
                 Ok Lmt
 
-            else if offsetMinutes == 300 || offsetMinutes == 360 || offsetMinutes == 420 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 || time.offsetMinutes == 360 || time.offsetMinutes == 420 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6423,24 +6423,24 @@ for__asia__dushanbe =
 for__asia__famagusta : Zone -> Posix -> Result Int Abbreviation
 for__asia__famagusta =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 135 || offsetMinutes == 136 then
+        (\time ->
+            if time.offsetMinutes == 135 || time.offsetMinutes == 136 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 1473282000 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 1473282000 then
+                        Offset time.offsetMinutes
 
                      else
                         ShortName "EEST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6449,28 +6449,28 @@ for__asia__famagusta =
 for__asia__gaza : Zone -> Posix -> Result Int Abbreviation
 for__asia__gaza =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 137 || offsetMinutes == 138 then
+        (\time ->
+            if time.offsetMinutes == 137 || time.offsetMinutes == 138 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 828655200 then
+                    (if time.posixSeconds >= 828655200 then
                         ShortName "EEST"
 
-                     else if posixSeconds >= 142380000 then
+                     else if time.posixSeconds >= 142380000 then
                         ShortName "IDT"
 
                      else
                         ShortName "EEST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 820447200 then
+                    (if time.posixSeconds >= 820447200 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -81313200 then
+                     else if time.posixSeconds >= -81313200 then
                         ShortName "IST"
 
                      else
@@ -6478,7 +6478,7 @@ for__asia__gaza =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6487,28 +6487,28 @@ for__asia__gaza =
 for__asia__hebron : Zone -> Posix -> Result Int Abbreviation
 for__asia__hebron =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 140 || offsetMinutes == 141 then
+        (\time ->
+            if time.offsetMinutes == 140 || time.offsetMinutes == 141 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 828655200 then
+                    (if time.posixSeconds >= 828655200 then
                         ShortName "EEST"
 
-                     else if posixSeconds >= 142380000 then
+                     else if time.posixSeconds >= 142380000 then
                         ShortName "IDT"
 
                      else
                         ShortName "EEST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 820447200 then
+                    (if time.posixSeconds >= 820447200 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -81313200 then
+                     else if time.posixSeconds >= -81313200 then
                         ShortName "IST"
 
                      else
@@ -6516,7 +6516,7 @@ for__asia__hebron =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6525,21 +6525,21 @@ for__asia__hebron =
 for__asia__ho_chi_minh : Zone -> Posix -> Result Int Abbreviation
 for__asia__ho_chi_minh =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 426 || offsetMinutes == 427 then
+        (\time ->
+            if time.offsetMinutes == 426 || time.offsetMinutes == 427 then
                 Ok
-                    (if posixSeconds >= -2004073590 then
+                    (if time.posixSeconds >= -2004073590 then
                         ShortName "PLMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 420 || offsetMinutes == 480 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 420 || time.offsetMinutes == 480 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6548,30 +6548,30 @@ for__asia__ho_chi_minh =
 for__asia__hong_kong : Zone -> Posix -> Result Int Abbreviation
 for__asia__hong_kong =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 456 || offsetMinutes == 457 then
+        (\time ->
+            if time.offsetMinutes == 456 || time.offsetMinutes == 457 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok
-                    (if posixSeconds >= -747907200 then
+                    (if time.posixSeconds >= -747907200 then
                         ShortName "HKST"
 
-                     else if posixSeconds >= -884248200 then
+                     else if time.posixSeconds >= -884248200 then
                         ShortName "JST"
 
                      else
                         ShortName "HKST"
                     )
 
-            else if offsetMinutes == 480 then
+            else if time.offsetMinutes == 480 then
                 Ok (ShortName "HKT")
 
-            else if offsetMinutes == 510 then
+            else if time.offsetMinutes == 510 then
                 Ok (ShortName "HKWT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6580,15 +6580,15 @@ for__asia__hong_kong =
 for__asia__hovd : Zone -> Posix -> Result Int Abbreviation
 for__asia__hovd =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 366 || offsetMinutes == 367 then
+        (\time ->
+            if time.offsetMinutes == 366 || time.offsetMinutes == 367 then
                 Ok Lmt
 
-            else if offsetMinutes == 360 || offsetMinutes == 420 || offsetMinutes == 480 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 360 || time.offsetMinutes == 420 || time.offsetMinutes == 480 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6597,21 +6597,21 @@ for__asia__hovd =
 for__asia__irkutsk : Zone -> Posix -> Result Int Abbreviation
 for__asia__irkutsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 417 || offsetMinutes == 418 then
+        (\time ->
+            if time.offsetMinutes == 417 || time.offsetMinutes == 418 then
                 Ok
-                    (if posixSeconds >= -2840165825 then
+                    (if time.posixSeconds >= -2840165825 then
                         ShortName "IMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 420 || offsetMinutes == 480 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 420 || time.offsetMinutes == 480 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6620,24 +6620,24 @@ for__asia__irkutsk =
 for__asia__jakarta : Zone -> Posix -> Result Int Abbreviation
 for__asia__jakarta =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 427 || offsetMinutes == 428 then
+        (\time ->
+            if time.offsetMinutes == 427 || time.offsetMinutes == 428 then
                 Ok
-                    (if posixSeconds >= -3231299232 then
+                    (if time.posixSeconds >= -3231299232 then
                         ShortName "BMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 440 || offsetMinutes == 450 || offsetMinutes == 480 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 440 || time.offsetMinutes == 450 || time.offsetMinutes == 480 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 420 then
+            else if time.offsetMinutes == 420 then
                 Ok (ShortName "WIB")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6646,24 +6646,24 @@ for__asia__jakarta =
 for__asia__jayapura : Zone -> Posix -> Result Int Abbreviation
 for__asia__jayapura =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 562 || offsetMinutes == 563 then
+        (\time ->
+            if time.offsetMinutes == 562 || time.offsetMinutes == 563 then
                 Ok Lmt
 
-            else if offsetMinutes == 570 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 570 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok
-                    (if posixSeconds >= -189423000 then
+                    (if time.posixSeconds >= -189423000 then
                         ShortName "WIT"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6672,27 +6672,27 @@ for__asia__jayapura =
 for__asia__jerusalem : Zone -> Posix -> Result Int Abbreviation
 for__asia__jerusalem =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 140 || offsetMinutes == 141 then
+        (\time ->
+            if time.offsetMinutes == 140 || time.offsetMinutes == 141 then
                 Ok
-                    (if posixSeconds >= -2840149254 then
+                    (if time.posixSeconds >= -2840149254 then
                         ShortName "JMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok (ShortName "IDDT")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "IDT")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "IST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6701,15 +6701,15 @@ for__asia__jerusalem =
 for__asia__kabul : Zone -> Posix -> Result Int Abbreviation
 for__asia__kabul =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 276 || offsetMinutes == 277 then
+        (\time ->
+            if time.offsetMinutes == 276 || time.offsetMinutes == 277 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 270 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 270 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6718,15 +6718,15 @@ for__asia__kabul =
 for__asia__kamchatka : Zone -> Posix -> Result Int Abbreviation
 for__asia__kamchatka =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 634 || offsetMinutes == 635 then
+        (\time ->
+            if time.offsetMinutes == 634 || time.offsetMinutes == 635 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 || offsetMinutes == 720 || offsetMinutes == 780 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 660 || time.offsetMinutes == 720 || time.offsetMinutes == 780 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6735,27 +6735,27 @@ for__asia__kamchatka =
 for__asia__karachi : Zone -> Posix -> Result Int Abbreviation
 for__asia__karachi =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 268 || offsetMinutes == 269 then
+        (\time ->
+            if time.offsetMinutes == 268 || time.offsetMinutes == 269 then
                 Ok Lmt
 
-            else if offsetMinutes == 330 || offsetMinutes == 390 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 330 || time.offsetMinutes == 390 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 300 then
+            else if time.offsetMinutes == 300 then
                 Ok
-                    (if posixSeconds >= 38775600 then
+                    (if time.posixSeconds >= 38775600 then
                         ShortName "PKT"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
-            else if offsetMinutes == 360 then
+            else if time.offsetMinutes == 360 then
                 Ok (ShortName "PKST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6764,15 +6764,15 @@ for__asia__karachi =
 for__asia__kathmandu : Zone -> Posix -> Result Int Abbreviation
 for__asia__kathmandu =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 341 || offsetMinutes == 342 then
+        (\time ->
+            if time.offsetMinutes == 341 || time.offsetMinutes == 342 then
                 Ok Lmt
 
-            else if offsetMinutes == 330 || offsetMinutes == 345 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 330 || time.offsetMinutes == 345 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6781,15 +6781,15 @@ for__asia__kathmandu =
 for__asia__khandyga : Zone -> Posix -> Result Int Abbreviation
 for__asia__khandyga =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 542 || offsetMinutes == 543 then
+        (\time ->
+            if time.offsetMinutes == 542 || time.offsetMinutes == 543 then
                 Ok Lmt
 
-            else if offsetMinutes == 480 || offsetMinutes == 540 || offsetMinutes == 600 || offsetMinutes == 660 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 480 || time.offsetMinutes == 540 || time.offsetMinutes == 600 || time.offsetMinutes == 660 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6798,27 +6798,27 @@ for__asia__khandyga =
 for__asia__kolkata : Zone -> Posix -> Result Int Abbreviation
 for__asia__kolkata =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 353 || offsetMinutes == 354 then
+        (\time ->
+            if time.offsetMinutes == 353 || time.offsetMinutes == 354 then
                 Ok
-                    (if posixSeconds >= -3645237208 then
+                    (if time.posixSeconds >= -3645237208 then
                         ShortName "HMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 390 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 390 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 330 then
+            else if time.offsetMinutes == 330 then
                 Ok (ShortName "IST")
 
-            else if offsetMinutes == 321 || offsetMinutes == 322 then
+            else if time.offsetMinutes == 321 || time.offsetMinutes == 322 then
                 Ok (ShortName "MMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6827,15 +6827,15 @@ for__asia__kolkata =
 for__asia__krasnoyarsk : Zone -> Posix -> Result Int Abbreviation
 for__asia__krasnoyarsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 371 || offsetMinutes == 372 then
+        (\time ->
+            if time.offsetMinutes == 371 || time.offsetMinutes == 372 then
                 Ok Lmt
 
-            else if offsetMinutes == 360 || offsetMinutes == 420 || offsetMinutes == 480 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 360 || time.offsetMinutes == 420 || time.offsetMinutes == 480 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6844,15 +6844,15 @@ for__asia__krasnoyarsk =
 for__asia__kuching : Zone -> Posix -> Result Int Abbreviation
 for__asia__kuching =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 441 || offsetMinutes == 442 then
+        (\time ->
+            if time.offsetMinutes == 441 || time.offsetMinutes == 442 then
                 Ok Lmt
 
-            else if offsetMinutes == 450 || offsetMinutes == 480 || offsetMinutes == 500 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 450 || time.offsetMinutes == 480 || time.offsetMinutes == 500 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6861,27 +6861,27 @@ for__asia__kuching =
 for__asia__macau : Zone -> Posix -> Result Int Abbreviation
 for__asia__macau =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 454 || offsetMinutes == 455 then
+        (\time ->
+            if time.offsetMinutes == 454 || time.offsetMinutes == 455 then
                 Ok Lmt
 
-            else if offsetMinutes == 600 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 600 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok
-                    (if posixSeconds >= -747046800 then
+                    (if time.posixSeconds >= -747046800 then
                         ShortName "CDT"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
-            else if offsetMinutes == 480 then
+            else if time.offsetMinutes == 480 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6890,15 +6890,15 @@ for__asia__macau =
 for__asia__magadan : Zone -> Posix -> Result Int Abbreviation
 for__asia__magadan =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 603 || offsetMinutes == 604 then
+        (\time ->
+            if time.offsetMinutes == 603 || time.offsetMinutes == 604 then
                 Ok Lmt
 
-            else if offsetMinutes == 600 || offsetMinutes == 660 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 600 || time.offsetMinutes == 660 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6907,30 +6907,30 @@ for__asia__magadan =
 for__asia__makassar : Zone -> Posix -> Result Int Abbreviation
 for__asia__makassar =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 477 || offsetMinutes == 478 then
+        (\time ->
+            if time.offsetMinutes == 477 || time.offsetMinutes == 478 then
                 Ok
-                    (if posixSeconds >= -1577951856 then
+                    (if time.posixSeconds >= -1577951856 then
                         ShortName "MMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 480 then
+            else if time.offsetMinutes == 480 then
                 Ok
-                    (if posixSeconds >= -766054800 then
+                    (if time.posixSeconds >= -766054800 then
                         ShortName "WITA"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6939,27 +6939,27 @@ for__asia__makassar =
 for__asia__manila : Zone -> Posix -> Result Int Abbreviation
 for__asia__manila =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -956 || offsetMinutes == 484 then
+        (\time ->
+            if time.offsetMinutes == -956 || time.offsetMinutes == 484 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok
-                    (if posixSeconds >= -496224000 then
+                    (if time.posixSeconds >= -496224000 then
                         ShortName "PDT"
 
-                     else if posixSeconds >= -873273600 then
+                     else if time.posixSeconds >= -873273600 then
                         ShortName "JST"
 
                      else
                         ShortName "PDT"
                     )
 
-            else if offsetMinutes == 480 then
+            else if time.offsetMinutes == 480 then
                 Ok (ShortName "PST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6968,18 +6968,18 @@ for__asia__manila =
 for__asia__nicosia : Zone -> Posix -> Result Int Abbreviation
 for__asia__nicosia =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 133 || offsetMinutes == 134 then
+        (\time ->
+            if time.offsetMinutes == 133 || time.offsetMinutes == 134 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EEST")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -6988,15 +6988,15 @@ for__asia__nicosia =
 for__asia__novokuznetsk : Zone -> Posix -> Result Int Abbreviation
 for__asia__novokuznetsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 348 || offsetMinutes == 349 then
+        (\time ->
+            if time.offsetMinutes == 348 || time.offsetMinutes == 349 then
                 Ok Lmt
 
-            else if offsetMinutes == 360 || offsetMinutes == 420 || offsetMinutes == 480 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 360 || time.offsetMinutes == 420 || time.offsetMinutes == 480 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7005,15 +7005,15 @@ for__asia__novokuznetsk =
 for__asia__novosibirsk : Zone -> Posix -> Result Int Abbreviation
 for__asia__novosibirsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 331 || offsetMinutes == 332 then
+        (\time ->
+            if time.offsetMinutes == 331 || time.offsetMinutes == 332 then
                 Ok Lmt
 
-            else if offsetMinutes == 360 || offsetMinutes == 420 || offsetMinutes == 480 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 360 || time.offsetMinutes == 420 || time.offsetMinutes == 480 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7022,15 +7022,15 @@ for__asia__novosibirsk =
 for__asia__omsk : Zone -> Posix -> Result Int Abbreviation
 for__asia__omsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 293 || offsetMinutes == 294 then
+        (\time ->
+            if time.offsetMinutes == 293 || time.offsetMinutes == 294 then
                 Ok Lmt
 
-            else if offsetMinutes == 300 || offsetMinutes == 360 || offsetMinutes == 420 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 || time.offsetMinutes == 360 || time.offsetMinutes == 420 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7039,15 +7039,15 @@ for__asia__omsk =
 for__asia__oral : Zone -> Posix -> Result Int Abbreviation
 for__asia__oral =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 205 || offsetMinutes == 206 then
+        (\time ->
+            if time.offsetMinutes == 205 || time.offsetMinutes == 206 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7056,33 +7056,33 @@ for__asia__oral =
 for__asia__pontianak : Zone -> Posix -> Result Int Abbreviation
 for__asia__pontianak =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 437 || offsetMinutes == 438 then
+        (\time ->
+            if time.offsetMinutes == 437 || time.offsetMinutes == 438 then
                 Ok
-                    (if posixSeconds >= -1946186240 then
+                    (if time.posixSeconds >= -1946186240 then
                         ShortName "PMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 450 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 450 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 480 then
+            else if time.offsetMinutes == 480 then
                 Ok
-                    (if posixSeconds >= -189415800 then
+                    (if time.posixSeconds >= -189415800 then
                         ShortName "WITA"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
-            else if offsetMinutes == 420 then
+            else if time.offsetMinutes == 420 then
                 Ok (ShortName "WIB")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7091,24 +7091,24 @@ for__asia__pontianak =
 for__asia__pyongyang : Zone -> Posix -> Result Int Abbreviation
 for__asia__pyongyang =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 503 then
+        (\time ->
+            if time.offsetMinutes == 503 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok
-                    (if posixSeconds >= -768646800 then
+                    (if time.posixSeconds >= -768646800 then
                         ShortName "KST"
 
                      else
                         ShortName "JST"
                     )
 
-            else if offsetMinutes == 510 then
+            else if time.offsetMinutes == 510 then
                 Ok (ShortName "KST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7117,15 +7117,15 @@ for__asia__pyongyang =
 for__asia__qatar : Zone -> Posix -> Result Int Abbreviation
 for__asia__qatar =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 206 || offsetMinutes == 207 then
+        (\time ->
+            if time.offsetMinutes == 206 || time.offsetMinutes == 207 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7134,15 +7134,15 @@ for__asia__qatar =
 for__asia__qostanay : Zone -> Posix -> Result Int Abbreviation
 for__asia__qostanay =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 254 || offsetMinutes == 255 then
+        (\time ->
+            if time.offsetMinutes == 254 || time.offsetMinutes == 255 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7151,15 +7151,15 @@ for__asia__qostanay =
 for__asia__qyzylorda : Zone -> Posix -> Result Int Abbreviation
 for__asia__qyzylorda =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 261 || offsetMinutes == 262 then
+        (\time ->
+            if time.offsetMinutes == 261 || time.offsetMinutes == 262 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7168,15 +7168,15 @@ for__asia__qyzylorda =
 for__asia__riyadh : Zone -> Posix -> Result Int Abbreviation
 for__asia__riyadh =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 186 || offsetMinutes == 187 then
+        (\time ->
+            if time.offsetMinutes == 186 || time.offsetMinutes == 187 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7185,15 +7185,15 @@ for__asia__riyadh =
 for__asia__sakhalin : Zone -> Posix -> Result Int Abbreviation
 for__asia__sakhalin =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 570 || offsetMinutes == 571 then
+        (\time ->
+            if time.offsetMinutes == 570 || time.offsetMinutes == 571 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 || offsetMinutes == 600 || offsetMinutes == 660 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 540 || time.offsetMinutes == 600 || time.offsetMinutes == 660 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7202,15 +7202,15 @@ for__asia__sakhalin =
 for__asia__samarkand : Zone -> Posix -> Result Int Abbreviation
 for__asia__samarkand =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 267 || offsetMinutes == 268 then
+        (\time ->
+            if time.offsetMinutes == 267 || time.offsetMinutes == 268 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7219,27 +7219,27 @@ for__asia__samarkand =
 for__asia__seoul : Zone -> Posix -> Result Int Abbreviation
 for__asia__seoul =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 507 || offsetMinutes == 508 then
+        (\time ->
+            if time.offsetMinutes == 507 || time.offsetMinutes == 508 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok
-                    (if posixSeconds >= -767350800 then
+                    (if time.posixSeconds >= -767350800 then
                         ShortName "KST"
 
                      else
                         ShortName "JST"
                     )
 
-            else if offsetMinutes == 570 || offsetMinutes == 600 then
+            else if time.offsetMinutes == 570 || time.offsetMinutes == 600 then
                 Ok (ShortName "KDT")
 
-            else if offsetMinutes == 510 then
+            else if time.offsetMinutes == 510 then
                 Ok (ShortName "KST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7248,18 +7248,18 @@ for__asia__seoul =
 for__asia__shanghai : Zone -> Posix -> Result Int Abbreviation
 for__asia__shanghai =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 485 || offsetMinutes == 486 then
+        (\time ->
+            if time.offsetMinutes == 485 || time.offsetMinutes == 486 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok (ShortName "CDT")
 
-            else if offsetMinutes == 480 then
+            else if time.offsetMinutes == 480 then
                 Ok (ShortName "CST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7268,21 +7268,21 @@ for__asia__shanghai =
 for__asia__singapore : Zone -> Posix -> Result Int Abbreviation
 for__asia__singapore =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 415 || offsetMinutes == 416 then
+        (\time ->
+            if time.offsetMinutes == 415 || time.offsetMinutes == 416 then
                 Ok
-                    (if posixSeconds >= -2177477725 then
+                    (if time.posixSeconds >= -2177477725 then
                         ShortName "SMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 420 || offsetMinutes == 440 || offsetMinutes == 450 || offsetMinutes == 480 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 420 || time.offsetMinutes == 440 || time.offsetMinutes == 450 || time.offsetMinutes == 480 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7291,15 +7291,15 @@ for__asia__singapore =
 for__asia__srednekolymsk : Zone -> Posix -> Result Int Abbreviation
 for__asia__srednekolymsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 614 || offsetMinutes == 615 then
+        (\time ->
+            if time.offsetMinutes == 614 || time.offsetMinutes == 615 then
                 Ok Lmt
 
-            else if offsetMinutes == 600 || offsetMinutes == 660 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 600 || time.offsetMinutes == 660 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7308,16 +7308,16 @@ for__asia__srednekolymsk =
 for__asia__taipei : Zone -> Posix -> Result Int Abbreviation
 for__asia__taipei =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 486 then
+        (\time ->
+            if time.offsetMinutes == 486 then
                 Ok Lmt
 
-            else if offsetMinutes == 480 then
+            else if time.offsetMinutes == 480 then
                 Ok (ShortName "CST")
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok
-                    (if posixSeconds >= -745833600 then
+                    (if time.posixSeconds >= -745833600 then
                         ShortName "CDT"
 
                      else
@@ -7325,7 +7325,7 @@ for__asia__taipei =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7334,15 +7334,15 @@ for__asia__taipei =
 for__asia__tashkent : Zone -> Posix -> Result Int Abbreviation
 for__asia__tashkent =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 277 || offsetMinutes == 278 then
+        (\time ->
+            if time.offsetMinutes == 277 || time.offsetMinutes == 278 then
                 Ok Lmt
 
-            else if offsetMinutes == 300 || offsetMinutes == 360 || offsetMinutes == 420 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 || time.offsetMinutes == 360 || time.offsetMinutes == 420 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7351,33 +7351,33 @@ for__asia__tashkent =
 for__asia__tbilisi : Zone -> Posix -> Result Int Abbreviation
 for__asia__tbilisi =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 179 then
+        (\time ->
+            if time.offsetMinutes == 179 then
                 Ok
-                    (if posixSeconds >= -2840151551 then
+                    (if time.posixSeconds >= -2840151551 then
                         ShortName "TBMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= -1441162751 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= -1441162751 then
+                        Offset time.offsetMinutes
 
-                     else if posixSeconds >= -2840151551 then
+                     else if time.posixSeconds >= -2840151551 then
                         ShortName "TBMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7386,21 +7386,21 @@ for__asia__tbilisi =
 for__asia__tehran : Zone -> Posix -> Result Int Abbreviation
 for__asia__tehran =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 205 || offsetMinutes == 206 then
+        (\time ->
+            if time.offsetMinutes == 205 || time.offsetMinutes == 206 then
                 Ok
-                    (if posixSeconds >= -1704165944 then
+                    (if time.posixSeconds >= -1704165944 then
                         ShortName "TMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 210 || offsetMinutes == 240 || offsetMinutes == 270 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 210 || time.offsetMinutes == 240 || time.offsetMinutes == 270 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7409,15 +7409,15 @@ for__asia__tehran =
 for__asia__thimphu : Zone -> Posix -> Result Int Abbreviation
 for__asia__thimphu =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 358 || offsetMinutes == 359 then
+        (\time ->
+            if time.offsetMinutes == 358 || time.offsetMinutes == 359 then
                 Ok Lmt
 
-            else if offsetMinutes == 330 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 330 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7426,18 +7426,18 @@ for__asia__thimphu =
 for__asia__tokyo : Zone -> Posix -> Result Int Abbreviation
 for__asia__tokyo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 558 || offsetMinutes == 559 then
+        (\time ->
+            if time.offsetMinutes == 558 || time.offsetMinutes == 559 then
                 Ok Lmt
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "JDT")
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok (ShortName "JST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7446,15 +7446,15 @@ for__asia__tokyo =
 for__asia__tomsk : Zone -> Posix -> Result Int Abbreviation
 for__asia__tomsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 339 || offsetMinutes == 340 then
+        (\time ->
+            if time.offsetMinutes == 339 || time.offsetMinutes == 340 then
                 Ok Lmt
 
-            else if offsetMinutes == 360 || offsetMinutes == 420 || offsetMinutes == 480 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 360 || time.offsetMinutes == 420 || time.offsetMinutes == 480 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7463,15 +7463,15 @@ for__asia__tomsk =
 for__asia__ulaanbaatar : Zone -> Posix -> Result Int Abbreviation
 for__asia__ulaanbaatar =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 427 || offsetMinutes == 428 then
+        (\time ->
+            if time.offsetMinutes == 427 || time.offsetMinutes == 428 then
                 Ok Lmt
 
-            else if offsetMinutes == 420 || offsetMinutes == 480 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 420 || time.offsetMinutes == 480 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7480,15 +7480,15 @@ for__asia__ulaanbaatar =
 for__asia__urumqi : Zone -> Posix -> Result Int Abbreviation
 for__asia__urumqi =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 350 || offsetMinutes == 351 then
+        (\time ->
+            if time.offsetMinutes == 350 || time.offsetMinutes == 351 then
                 Ok Lmt
 
-            else if offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7497,15 +7497,15 @@ for__asia__urumqi =
 for__asia__ust_nera : Zone -> Posix -> Result Int Abbreviation
 for__asia__ust_nera =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 572 || offsetMinutes == 573 then
+        (\time ->
+            if time.offsetMinutes == 572 || time.offsetMinutes == 573 then
                 Ok Lmt
 
-            else if offsetMinutes == 480 || offsetMinutes == 540 || offsetMinutes == 600 || offsetMinutes == 660 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 480 || time.offsetMinutes == 540 || time.offsetMinutes == 600 || time.offsetMinutes == 660 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7514,15 +7514,15 @@ for__asia__ust_nera =
 for__asia__vladivostok : Zone -> Posix -> Result Int Abbreviation
 for__asia__vladivostok =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 527 || offsetMinutes == 528 then
+        (\time ->
+            if time.offsetMinutes == 527 || time.offsetMinutes == 528 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 || offsetMinutes == 600 || offsetMinutes == 660 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 540 || time.offsetMinutes == 600 || time.offsetMinutes == 660 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7531,15 +7531,15 @@ for__asia__vladivostok =
 for__asia__yakutsk : Zone -> Posix -> Result Int Abbreviation
 for__asia__yakutsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 518 || offsetMinutes == 519 then
+        (\time ->
+            if time.offsetMinutes == 518 || time.offsetMinutes == 519 then
                 Ok Lmt
 
-            else if offsetMinutes == 480 || offsetMinutes == 540 || offsetMinutes == 600 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 480 || time.offsetMinutes == 540 || time.offsetMinutes == 600 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7548,21 +7548,21 @@ for__asia__yakutsk =
 for__asia__yangon : Zone -> Posix -> Result Int Abbreviation
 for__asia__yangon =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 384 || offsetMinutes == 385 then
+        (\time ->
+            if time.offsetMinutes == 384 || time.offsetMinutes == 385 then
                 Ok
-                    (if posixSeconds >= -2840163887 then
+                    (if time.posixSeconds >= -2840163887 then
                         ShortName "RMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 390 || offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 390 || time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7571,18 +7571,18 @@ for__asia__yangon =
 for__asia__yekaterinburg : Zone -> Posix -> Result Int Abbreviation
 for__asia__yekaterinburg =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 242 || offsetMinutes == 243 then
+        (\time ->
+            if time.offsetMinutes == 242 || time.offsetMinutes == 243 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 225 || offsetMinutes == 226 then
+            else if time.offsetMinutes == 225 || time.offsetMinutes == 226 then
                 Ok (ShortName "PMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7591,15 +7591,15 @@ for__asia__yekaterinburg =
 for__asia__yerevan : Zone -> Posix -> Result Int Abbreviation
 for__asia__yerevan =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 178 then
+        (\time ->
+            if time.offsetMinutes == 178 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7608,33 +7608,33 @@ for__asia__yerevan =
 for__atlantic__azores : Zone -> Posix -> Result Int Abbreviation
 for__atlantic__azores =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -103 || offsetMinutes == -102 then
+        (\time ->
+            if time.offsetMinutes == -103 || time.offsetMinutes == -102 then
                 Ok Lmt
 
-            else if offsetMinutes == -120 || offsetMinutes == -60 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -120 || time.offsetMinutes == -60 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok
-                    (if posixSeconds >= 740278800 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 740278800 then
+                        Offset time.offsetMinutes
 
-                     else if posixSeconds >= 725421600 then
+                     else if time.posixSeconds >= 725421600 then
                         ShortName "WET"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
-            else if offsetMinutes == -115 || offsetMinutes == -114 then
+            else if time.offsetMinutes == -115 || time.offsetMinutes == -114 then
                 Ok (ShortName "HMT")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "WEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7643,27 +7643,27 @@ for__atlantic__azores =
 for__atlantic__bermuda : Zone -> Posix -> Result Int Abbreviation
 for__atlantic__bermuda =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -260 || offsetMinutes == -259 then
+        (\time ->
+            if time.offsetMinutes == -260 || time.offsetMinutes == -259 then
                 Ok
-                    (if posixSeconds >= -2524506042 then
+                    (if time.posixSeconds >= -2524506042 then
                         ShortName "BMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -180 then
+            else if time.offsetMinutes == -180 then
                 Ok (ShortName "ADT")
 
-            else if offsetMinutes == -240 then
+            else if time.offsetMinutes == -240 then
                 Ok (ShortName "AST")
 
-            else if offsetMinutes == -200 || offsetMinutes == -199 then
+            else if time.offsetMinutes == -200 || time.offsetMinutes == -199 then
                 Ok (ShortName "BST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7672,21 +7672,21 @@ for__atlantic__bermuda =
 for__atlantic__canary : Zone -> Posix -> Result Int Abbreviation
 for__atlantic__canary =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -62 || offsetMinutes == -61 then
+        (\time ->
+            if time.offsetMinutes == -62 || time.offsetMinutes == -61 then
                 Ok Lmt
 
-            else if offsetMinutes == -60 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -60 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "WEST")
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7695,15 +7695,15 @@ for__atlantic__canary =
 for__atlantic__cape_verde : Zone -> Posix -> Result Int Abbreviation
 for__atlantic__cape_verde =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -95 || offsetMinutes == -94 then
+        (\time ->
+            if time.offsetMinutes == -95 || time.offsetMinutes == -94 then
                 Ok Lmt
 
-            else if offsetMinutes == -120 || offsetMinutes == -60 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -120 || time.offsetMinutes == -60 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7712,18 +7712,18 @@ for__atlantic__cape_verde =
 for__atlantic__faroe : Zone -> Posix -> Result Int Abbreviation
 for__atlantic__faroe =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -28 || offsetMinutes == -27 then
+        (\time ->
+            if time.offsetMinutes == -28 || time.offsetMinutes == -27 then
                 Ok Lmt
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "WEST")
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7732,39 +7732,39 @@ for__atlantic__faroe =
 for__atlantic__madeira : Zone -> Posix -> Result Int Abbreviation
 for__atlantic__madeira =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -68 || offsetMinutes == -67 then
+        (\time ->
+            if time.offsetMinutes == -68 || time.offsetMinutes == -67 then
                 Ok
-                    (if posixSeconds >= -2713906344 then
+                    (if time.posixSeconds >= -2713906344 then
                         ShortName "FMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -60 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -60 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok
-                    (if posixSeconds >= -102546000 then
+                    (if time.posixSeconds >= -102546000 then
                         ShortName "WET"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= 386726400 then
+                    (if time.posixSeconds >= 386726400 then
                         ShortName "WEST"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7773,15 +7773,15 @@ for__atlantic__madeira =
 for__atlantic__south_georgia : Zone -> Posix -> Result Int Abbreviation
 for__atlantic__south_georgia =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -147 || offsetMinutes == -146 then
+        (\time ->
+            if time.offsetMinutes == -147 || time.offsetMinutes == -146 then
                 Ok Lmt
 
-            else if offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7790,21 +7790,21 @@ for__atlantic__south_georgia =
 for__atlantic__stanley : Zone -> Posix -> Result Int Abbreviation
 for__atlantic__stanley =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -232 || offsetMinutes == -231 then
+        (\time ->
+            if time.offsetMinutes == -232 || time.offsetMinutes == -231 then
                 Ok
-                    (if posixSeconds >= -2524507716 then
+                    (if time.posixSeconds >= -2524507716 then
                         ShortName "SMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -240 || offsetMinutes == -180 || offsetMinutes == -120 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -240 || time.offsetMinutes == -180 || time.offsetMinutes == -120 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7813,18 +7813,18 @@ for__atlantic__stanley =
 for__australia__adelaide : Zone -> Posix -> Result Int Abbreviation
 for__australia__adelaide =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 554 || offsetMinutes == 555 then
+        (\time ->
+            if time.offsetMinutes == 554 || time.offsetMinutes == 555 then
                 Ok Lmt
 
-            else if offsetMinutes == 630 then
+            else if time.offsetMinutes == 630 then
                 Ok (ShortName "ACDT")
 
-            else if offsetMinutes == 540 || offsetMinutes == 570 then
+            else if time.offsetMinutes == 540 || time.offsetMinutes == 570 then
                 Ok (ShortName "ACST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7833,18 +7833,18 @@ for__australia__adelaide =
 for__australia__brisbane : Zone -> Posix -> Result Int Abbreviation
 for__australia__brisbane =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 612 || offsetMinutes == 613 then
+        (\time ->
+            if time.offsetMinutes == 612 || time.offsetMinutes == 613 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 then
+            else if time.offsetMinutes == 660 then
                 Ok (ShortName "AEDT")
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "AEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7853,21 +7853,21 @@ for__australia__brisbane =
 for__australia__broken_hill : Zone -> Posix -> Result Int Abbreviation
 for__australia__broken_hill =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 565 || offsetMinutes == 566 then
+        (\time ->
+            if time.offsetMinutes == 565 || time.offsetMinutes == 566 then
                 Ok Lmt
 
-            else if offsetMinutes == 630 then
+            else if time.offsetMinutes == 630 then
                 Ok (ShortName "ACDT")
 
-            else if offsetMinutes == 540 || offsetMinutes == 570 then
+            else if time.offsetMinutes == 540 || time.offsetMinutes == 570 then
                 Ok (ShortName "ACST")
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "AEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7876,18 +7876,18 @@ for__australia__broken_hill =
 for__australia__darwin : Zone -> Posix -> Result Int Abbreviation
 for__australia__darwin =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 523 || offsetMinutes == 524 then
+        (\time ->
+            if time.offsetMinutes == 523 || time.offsetMinutes == 524 then
                 Ok Lmt
 
-            else if offsetMinutes == 630 then
+            else if time.offsetMinutes == 630 then
                 Ok (ShortName "ACDT")
 
-            else if offsetMinutes == 540 || offsetMinutes == 570 then
+            else if time.offsetMinutes == 540 || time.offsetMinutes == 570 then
                 Ok (ShortName "ACST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7896,15 +7896,15 @@ for__australia__darwin =
 for__australia__eucla : Zone -> Posix -> Result Int Abbreviation
 for__australia__eucla =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 515 || offsetMinutes == 516 then
+        (\time ->
+            if time.offsetMinutes == 515 || time.offsetMinutes == 516 then
                 Ok Lmt
 
-            else if offsetMinutes == 525 || offsetMinutes == 585 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 525 || time.offsetMinutes == 585 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7913,18 +7913,18 @@ for__australia__eucla =
 for__australia__hobart : Zone -> Posix -> Result Int Abbreviation
 for__australia__hobart =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 589 || offsetMinutes == 590 then
+        (\time ->
+            if time.offsetMinutes == 589 || time.offsetMinutes == 590 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 then
+            else if time.offsetMinutes == 660 then
                 Ok (ShortName "AEDT")
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "AEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7933,18 +7933,18 @@ for__australia__hobart =
 for__australia__lindeman : Zone -> Posix -> Result Int Abbreviation
 for__australia__lindeman =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 595 || offsetMinutes == 596 then
+        (\time ->
+            if time.offsetMinutes == 595 || time.offsetMinutes == 596 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 then
+            else if time.offsetMinutes == 660 then
                 Ok (ShortName "AEDT")
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "AEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7953,18 +7953,18 @@ for__australia__lindeman =
 for__australia__lord_howe : Zone -> Posix -> Result Int Abbreviation
 for__australia__lord_howe =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 636 || offsetMinutes == 637 then
+        (\time ->
+            if time.offsetMinutes == 636 || time.offsetMinutes == 637 then
                 Ok Lmt
 
-            else if offsetMinutes == 630 || offsetMinutes == 660 || offsetMinutes == 690 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 630 || time.offsetMinutes == 660 || time.offsetMinutes == 690 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "AEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7973,18 +7973,18 @@ for__australia__lord_howe =
 for__australia__melbourne : Zone -> Posix -> Result Int Abbreviation
 for__australia__melbourne =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 579 || offsetMinutes == 580 then
+        (\time ->
+            if time.offsetMinutes == 579 || time.offsetMinutes == 580 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 then
+            else if time.offsetMinutes == 660 then
                 Ok (ShortName "AEDT")
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "AEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -7993,18 +7993,18 @@ for__australia__melbourne =
 for__australia__perth : Zone -> Posix -> Result Int Abbreviation
 for__australia__perth =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 463 || offsetMinutes == 464 then
+        (\time ->
+            if time.offsetMinutes == 463 || time.offsetMinutes == 464 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 then
+            else if time.offsetMinutes == 540 then
                 Ok (ShortName "AWDT")
 
-            else if offsetMinutes == 480 then
+            else if time.offsetMinutes == 480 then
                 Ok (ShortName "AWST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8013,18 +8013,18 @@ for__australia__perth =
 for__australia__sydney : Zone -> Posix -> Result Int Abbreviation
 for__australia__sydney =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 604 || offsetMinutes == 605 then
+        (\time ->
+            if time.offsetMinutes == 604 || time.offsetMinutes == 605 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 then
+            else if time.offsetMinutes == 660 then
                 Ok (ShortName "AEDT")
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok (ShortName "AEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8033,21 +8033,21 @@ for__australia__sydney =
 for__europe__andorra : Zone -> Posix -> Result Int Abbreviation
 for__europe__andorra =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 6 || offsetMinutes == 7 then
+        (\time ->
+            if time.offsetMinutes == 6 || time.offsetMinutes == 7 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8056,15 +8056,15 @@ for__europe__andorra =
 for__europe__astrakhan : Zone -> Posix -> Result Int Abbreviation
 for__europe__astrakhan =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 192 || offsetMinutes == 193 then
+        (\time ->
+            if time.offsetMinutes == 192 || time.offsetMinutes == 193 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8073,28 +8073,28 @@ for__europe__astrakhan =
 for__europe__athens : Zone -> Posix -> Result Int Abbreviation
 for__europe__athens =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 94 || offsetMinutes == 95 then
+        (\time ->
+            if time.offsetMinutes == 94 || time.offsetMinutes == 95 then
                 Ok
-                    (if posixSeconds >= -2344642492 then
+                    (if time.posixSeconds >= -2344642492 then
                         ShortName "AMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EEST")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= -812422800 then
+                    (if time.posixSeconds >= -812422800 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -904878000 then
+                     else if time.posixSeconds >= -904878000 then
                         ShortName "CEST"
 
                      else
@@ -8102,7 +8102,7 @@ for__europe__athens =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8111,18 +8111,18 @@ for__europe__athens =
 for__europe__belgrade : Zone -> Posix -> Result Int Abbreviation
 for__europe__belgrade =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 82 then
+        (\time ->
+            if time.offsetMinutes == 82 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8131,21 +8131,21 @@ for__europe__belgrade =
 for__europe__berlin : Zone -> Posix -> Result Int Abbreviation
 for__europe__berlin =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 53 || offsetMinutes == 54 then
+        (\time ->
+            if time.offsetMinutes == 53 || time.offsetMinutes == 54 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "CEMT")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8154,36 +8154,36 @@ for__europe__berlin =
 for__europe__brussels : Zone -> Posix -> Result Int Abbreviation
 for__europe__brussels =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 17 || offsetMinutes == 18 then
+        (\time ->
+            if time.offsetMinutes == 17 || time.offsetMinutes == 18 then
                 Ok
-                    (if posixSeconds >= -2840141850 then
+                    (if time.posixSeconds >= -2840141850 then
                         ShortName "BMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= -857257200 then
+                    (if time.posixSeconds >= -857257200 then
                         ShortName "CET"
 
-                     else if posixSeconds >= -1604278800 then
+                     else if time.posixSeconds >= -1604278800 then
                         ShortName "WEST"
 
                      else
                         ShortName "CET"
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8192,24 +8192,24 @@ for__europe__brussels =
 for__europe__bucharest : Zone -> Posix -> Result Int Abbreviation
 for__europe__bucharest =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 104 || offsetMinutes == 105 then
+        (\time ->
+            if time.offsetMinutes == 104 || time.offsetMinutes == 105 then
                 Ok
-                    (if posixSeconds >= -2469404664 then
+                    (if time.posixSeconds >= -2469404664 then
                         ShortName "BMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EEST")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8218,18 +8218,18 @@ for__europe__bucharest =
 for__europe__budapest : Zone -> Posix -> Result Int Abbreviation
 for__europe__budapest =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 76 || offsetMinutes == 77 then
+        (\time ->
+            if time.offsetMinutes == 76 || time.offsetMinutes == 77 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8238,54 +8238,54 @@ for__europe__budapest =
 for__europe__chisinau : Zone -> Posix -> Result Int Abbreviation
 for__europe__chisinau =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 116 then
+        (\time ->
+            if time.offsetMinutes == 116 then
                 Ok Lmt
 
-            else if offsetMinutes == 115 then
+            else if time.offsetMinutes == 115 then
                 Ok
-                    (if posixSeconds >= -2840147720 then
+                    (if time.posixSeconds >= -2840147720 then
                         ShortName "CMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 104 || offsetMinutes == 105 then
+            else if time.offsetMinutes == 104 || time.offsetMinutes == 105 then
                 Ok (ShortName "BMT")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 641944800 then
+                    (if time.posixSeconds >= 641944800 then
                         ShortName "EEST"
 
-                     else if posixSeconds >= -800157600 then
+                     else if time.posixSeconds >= -800157600 then
                         ShortName "MSK"
 
                      else
                         ShortName "EEST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 654652800 then
+                    (if time.posixSeconds >= 654652800 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -898138800 then
+                     else if time.posixSeconds >= -898138800 then
                         ShortName "CEST"
 
                      else
                         ShortName "EET"
                     )
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok (ShortName "MSD")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8294,33 +8294,33 @@ for__europe__chisinau =
 for__europe__dublin : Zone -> Posix -> Result Int Abbreviation
 for__europe__dublin =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -26 || offsetMinutes == -25 then
+        (\time ->
+            if time.offsetMinutes == -26 || time.offsetMinutes == -25 then
                 Ok
-                    (if posixSeconds >= -2821649679 then
+                    (if time.posixSeconds >= -2821649679 then
                         ShortName "DMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= -1507500000 then
+                    (if time.posixSeconds >= -1507500000 then
                         ShortName "IST"
 
                      else
                         ShortName "BST"
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
-            else if offsetMinutes == 34 || offsetMinutes == 35 then
+            else if time.offsetMinutes == 34 || time.offsetMinutes == 35 then
                 Ok (ShortName "IST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8329,33 +8329,33 @@ for__europe__dublin =
 for__europe__gibraltar : Zone -> Posix -> Result Int Abbreviation
 for__europe__gibraltar =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -22 || offsetMinutes == -21 then
+        (\time ->
+            if time.offsetMinutes == -22 || time.offsetMinutes == -21 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 386125200 then
+                    (if time.posixSeconds >= 386125200 then
                         ShortName "CEST"
 
                      else
                         ShortName "BDST"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= -401320800 then
+                    (if time.posixSeconds >= -401320800 then
                         ShortName "CET"
 
                      else
                         ShortName "BST"
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8364,24 +8364,24 @@ for__europe__gibraltar =
 for__europe__helsinki : Zone -> Posix -> Result Int Abbreviation
 for__europe__helsinki =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 99 || offsetMinutes == 100 then
+        (\time ->
+            if time.offsetMinutes == 99 || time.offsetMinutes == 100 then
                 Ok
-                    (if posixSeconds >= -2890258789 then
+                    (if time.posixSeconds >= -2890258789 then
                         ShortName "HMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EEST")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8390,45 +8390,45 @@ for__europe__helsinki =
 for__europe__istanbul : Zone -> Posix -> Result Int Abbreviation
 for__europe__istanbul =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 115 then
+        (\time ->
+            if time.offsetMinutes == 115 then
                 Ok Lmt
 
-            else if offsetMinutes == 116 then
+            else if time.offsetMinutes == 116 then
                 Ok
-                    (if posixSeconds >= -2840147752 then
+                    (if time.posixSeconds >= -2840147752 then
                         ShortName "IMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 240 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 1473195600 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 1473195600 then
+                        Offset time.offsetMinutes
 
-                     else if posixSeconds >= 482799600 then
+                     else if time.posixSeconds >= 482799600 then
                         ShortName "EEST"
 
-                     else if posixSeconds >= 267915600 then
-                        Offset offsetMinutes
+                     else if time.posixSeconds >= 267915600 then
+                        Offset time.offsetMinutes
 
                      else
                         ShortName "EEST"
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
-            else if offsetMinutes == 117 then
+            else if time.offsetMinutes == 117 then
                 Ok (ShortName "IMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8437,42 +8437,42 @@ for__europe__istanbul =
 for__europe__kaliningrad : Zone -> Posix -> Result Int Abbreviation
 for__europe__kaliningrad =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 82 then
+        (\time ->
+            if time.offsetMinutes == 82 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= -780372000 then
+                    (if time.posixSeconds >= -780372000 then
                         ShortName "EET"
 
                      else
                         ShortName "CEST"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 1301184000 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 1301184000 then
+                        Offset time.offsetMinutes
 
-                     else if posixSeconds >= 606870000 then
+                     else if time.posixSeconds >= 606870000 then
                         ShortName "EEST"
 
-                     else if posixSeconds >= -749095200 then
+                     else if time.posixSeconds >= -749095200 then
                         ShortName "MSK"
 
                      else
                         ShortName "EEST"
                     )
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok (ShortName "MSD")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8481,42 +8481,42 @@ for__europe__kaliningrad =
 for__europe__kirov : Zone -> Posix -> Result Int Abbreviation
 for__europe__kirov =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 198 || offsetMinutes == 199 then
+        (\time ->
+            if time.offsetMinutes == 198 || time.offsetMinutes == 199 then
                 Ok Lmt
 
-            else if offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok
-                    (if posixSeconds >= 1301180400 then
+                    (if time.posixSeconds >= 1301180400 then
                         ShortName "MSK"
 
-                     else if posixSeconds >= 701820000 then
+                     else if time.posixSeconds >= 701820000 then
                         ShortName "MSD"
 
-                     else if posixSeconds >= 670374000 then
-                        Offset offsetMinutes
+                     else if time.posixSeconds >= 670374000 then
+                        Offset time.offsetMinutes
 
-                     else if posixSeconds >= 606866400 then
+                     else if time.posixSeconds >= 606866400 then
                         ShortName "MSD"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 622594800 then
+                    (if time.posixSeconds >= 622594800 then
                         ShortName "MSK"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8525,37 +8525,37 @@ for__europe__kirov =
 for__europe__kyiv : Zone -> Posix -> Result Int Abbreviation
 for__europe__kyiv =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 122 || offsetMinutes == 123 then
+        (\time ->
+            if time.offsetMinutes == 122 || time.offsetMinutes == 123 then
                 Ok
-                    (if posixSeconds >= -2840148124 then
+                    (if time.posixSeconds >= -2840148124 then
                         ShortName "KMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 686102400 then
+                    (if time.posixSeconds >= 686102400 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -892522800 then
+                     else if time.posixSeconds >= -892522800 then
                         ShortName "CEST"
 
                      else
                         ShortName "EET"
                     )
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok (ShortName "MSD")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 646783200 then
+                    (if time.posixSeconds >= 646783200 then
                         ShortName "EEST"
 
                      else
@@ -8563,7 +8563,7 @@ for__europe__kyiv =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8572,42 +8572,42 @@ for__europe__kyiv =
 for__europe__lisbon : Zone -> Posix -> Result Int Abbreviation
 for__europe__lisbon =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -37 || offsetMinutes == -36 then
+        (\time ->
+            if time.offsetMinutes == -37 || time.offsetMinutes == -36 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 733280400 then
+                    (if time.posixSeconds >= 733280400 then
                         ShortName "CEST"
 
                      else
                         ShortName "WEMT"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= 828234000 then
+                    (if time.posixSeconds >= 828234000 then
                         ShortName "WEST"
 
-                     else if posixSeconds >= 717555600 then
+                     else if time.posixSeconds >= 717555600 then
                         ShortName "CET"
 
-                     else if posixSeconds >= 228268800 then
+                     else if time.posixSeconds >= 228268800 then
                         ShortName "WEST"
 
-                     else if posixSeconds >= -102549600 then
+                     else if time.posixSeconds >= -102549600 then
                         ShortName "CET"
 
                      else
                         ShortName "WEST"
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8616,21 +8616,21 @@ for__europe__lisbon =
 for__europe__london : Zone -> Posix -> Result Int Abbreviation
 for__europe__london =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -2 || offsetMinutes == -1 then
+        (\time ->
+            if time.offsetMinutes == -2 || time.offsetMinutes == -1 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "BDST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "BST")
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8639,33 +8639,33 @@ for__europe__london =
 for__europe__madrid : Zone -> Posix -> Result Int Abbreviation
 for__europe__madrid =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -15 || offsetMinutes == -14 then
+        (\time ->
+            if time.offsetMinutes == -15 || time.offsetMinutes == -14 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= -873079200 then
+                    (if time.posixSeconds >= -873079200 then
                         ShortName "CEST"
 
                      else
                         ShortName "WEMT"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= -940208400 then
+                    (if time.posixSeconds >= -940208400 then
                         ShortName "CET"
 
                      else
                         ShortName "WEST"
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8674,18 +8674,18 @@ for__europe__madrid =
 for__europe__malta : Zone -> Posix -> Result Int Abbreviation
 for__europe__malta =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 58 || offsetMinutes == 59 then
+        (\time ->
+            if time.offsetMinutes == 58 || time.offsetMinutes == 59 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8694,43 +8694,43 @@ for__europe__malta =
 for__europe__minsk : Zone -> Posix -> Result Int Abbreviation
 for__europe__minsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 111 then
+        (\time ->
+            if time.offsetMinutes == 111 then
                 Ok Lmt
 
-            else if offsetMinutes == 110 then
+            else if time.offsetMinutes == 110 then
                 Ok
-                    (if posixSeconds >= -2840147416 then
+                    (if time.posixSeconds >= -2840147416 then
                         ShortName "MMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 686102400 then
+                    (if time.posixSeconds >= 686102400 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -899780400 then
+                     else if time.posixSeconds >= -899780400 then
                         ShortName "CEST"
 
                      else
                         ShortName "EET"
                     )
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok (ShortName "MSD")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 1301184000 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 1301184000 then
+                        Offset time.offsetMinutes
 
-                     else if posixSeconds >= 670374000 then
+                     else if time.posixSeconds >= 670374000 then
                         ShortName "EEST"
 
                      else
@@ -8738,7 +8738,7 @@ for__europe__minsk =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8747,54 +8747,54 @@ for__europe__minsk =
 for__europe__moscow : Zone -> Posix -> Result Int Abbreviation
 for__europe__moscow =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 150 || offsetMinutes == 151 then
+        (\time ->
+            if time.offsetMinutes == 150 || time.offsetMinutes == 151 then
                 Ok
-                    (if posixSeconds >= -2840149817 then
+                    (if time.posixSeconds >= -2840149817 then
                         ShortName "MMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "EET")
 
-            else if offsetMinutes == 271 || offsetMinutes == 272 then
+            else if time.offsetMinutes == 271 || time.offsetMinutes == 272 then
                 Ok (ShortName "MDST")
 
-            else if offsetMinutes == 152 then
+            else if time.offsetMinutes == 152 then
                 Ok (ShortName "MMT")
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok
-                    (if posixSeconds >= 1301180400 then
+                    (if time.posixSeconds >= 1301180400 then
                         ShortName "MSK"
 
                      else
                         ShortName "MSD"
                     )
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 695779200 then
+                    (if time.posixSeconds >= 695779200 then
                         ShortName "MSK"
 
-                     else if posixSeconds >= 670374000 then
+                     else if time.posixSeconds >= 670374000 then
                         ShortName "EEST"
 
                      else
                         ShortName "MSK"
                     )
 
-            else if offsetMinutes == 211 || offsetMinutes == 212 then
+            else if time.offsetMinutes == 211 || time.offsetMinutes == 212 then
                 Ok (ShortName "MST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8803,48 +8803,48 @@ for__europe__moscow =
 for__europe__paris : Zone -> Posix -> Result Int Abbreviation
 for__europe__paris =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 9 || offsetMinutes == 10 then
+        (\time ->
+            if time.offsetMinutes == 9 || time.offsetMinutes == 10 then
                 Ok
-                    (if posixSeconds >= -2486592561 then
+                    (if time.posixSeconds >= -2486592561 then
                         ShortName "PMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 196819200 then
+                    (if time.posixSeconds >= 196819200 then
                         ShortName "CEST"
 
-                     else if posixSeconds >= -800071200 then
+                     else if time.posixSeconds >= -800071200 then
                         ShortName "WEMT"
 
                      else
                         ShortName "CEST"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok
-                    (if posixSeconds >= -766623600 then
+                    (if time.posixSeconds >= -766623600 then
                         ShortName "CET"
 
-                     else if posixSeconds >= -796266000 then
+                     else if time.posixSeconds >= -796266000 then
                         ShortName "WEST"
 
-                     else if posixSeconds >= -857257200 then
+                     else if time.posixSeconds >= -857257200 then
                         ShortName "CET"
 
                      else
                         ShortName "WEST"
                     )
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "WET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8853,27 +8853,27 @@ for__europe__paris =
 for__europe__prague : Zone -> Posix -> Result Int Abbreviation
 for__europe__prague =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 57 || offsetMinutes == 58 then
+        (\time ->
+            if time.offsetMinutes == 57 || time.offsetMinutes == 58 then
                 Ok
-                    (if posixSeconds >= -3786829064 then
+                    (if time.posixSeconds >= -3786829064 then
                         ShortName "PMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok (ShortName "GMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8882,40 +8882,40 @@ for__europe__prague =
 for__europe__riga : Zone -> Posix -> Result Int Abbreviation
 for__europe__riga =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 96 || offsetMinutes == 97 then
+        (\time ->
+            if time.offsetMinutes == 96 || time.offsetMinutes == 97 then
                 Ok
-                    (if posixSeconds >= -2840146594 then
+                    (if time.posixSeconds >= -2840146594 then
                         ShortName "RMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 622598400 then
+                    (if time.posixSeconds >= 622598400 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -899521200 then
+                     else if time.posixSeconds >= -899521200 then
                         ShortName "CEST"
 
                      else
                         ShortName "EET"
                     )
 
-            else if offsetMinutes == 156 || offsetMinutes == 157 then
+            else if time.offsetMinutes == 156 || time.offsetMinutes == 157 then
                 Ok (ShortName "LST")
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok (ShortName "MSD")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 606870000 then
+                    (if time.posixSeconds >= 606870000 then
                         ShortName "EEST"
 
                      else
@@ -8923,7 +8923,7 @@ for__europe__riga =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8932,24 +8932,24 @@ for__europe__riga =
 for__europe__rome : Zone -> Posix -> Result Int Abbreviation
 for__europe__rome =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 49 || offsetMinutes == 50 then
+        (\time ->
+            if time.offsetMinutes == 49 || time.offsetMinutes == 50 then
                 Ok
-                    (if posixSeconds >= -3252098996 then
+                    (if time.posixSeconds >= -3252098996 then
                         ShortName "RMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8958,15 +8958,15 @@ for__europe__rome =
 for__europe__samara : Zone -> Posix -> Result Int Abbreviation
 for__europe__samara =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 200 || offsetMinutes == 201 then
+        (\time ->
+            if time.offsetMinutes == 200 || time.offsetMinutes == 201 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8975,15 +8975,15 @@ for__europe__samara =
 for__europe__saratov : Zone -> Posix -> Result Int Abbreviation
 for__europe__saratov =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 184 || offsetMinutes == 185 then
+        (\time ->
+            if time.offsetMinutes == 184 || time.offsetMinutes == 185 then
                 Ok Lmt
 
-            else if offsetMinutes == 180 || offsetMinutes == 240 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 180 || time.offsetMinutes == 240 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -8992,55 +8992,55 @@ for__europe__saratov =
 for__europe__simferopol : Zone -> Posix -> Result Int Abbreviation
 for__europe__simferopol =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 137 then
+        (\time ->
+            if time.offsetMinutes == 137 then
                 Ok Lmt
 
-            else if offsetMinutes == 136 then
+            else if time.offsetMinutes == 136 then
                 Ok
-                    (if posixSeconds >= -2840148984 then
+                    (if time.posixSeconds >= -2840148984 then
                         ShortName "SMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 646786800 then
+                    (if time.posixSeconds >= 646786800 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -888894000 then
+                     else if time.posixSeconds >= -888894000 then
                         ShortName "CEST"
 
                      else
                         ShortName "EET"
                     )
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok
-                    (if posixSeconds >= 1396137600 then
+                    (if time.posixSeconds >= 1396137600 then
                         ShortName "MSK"
 
                      else
                         ShortName "MSD"
                     )
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 1414274400 then
+                    (if time.posixSeconds >= 1414274400 then
                         ShortName "MSK"
 
-                     else if posixSeconds >= 859683600 then
+                     else if time.posixSeconds >= 859683600 then
                         ShortName "EEST"
 
-                     else if posixSeconds >= 780447600 then
+                     else if time.posixSeconds >= 780447600 then
                         ShortName "MSK"
 
-                     else if posixSeconds >= 701827200 then
+                     else if time.posixSeconds >= 701827200 then
                         ShortName "EEST"
 
                      else
@@ -9048,7 +9048,7 @@ for__europe__simferopol =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9057,33 +9057,33 @@ for__europe__simferopol =
 for__europe__sofia : Zone -> Posix -> Result Int Abbreviation
 for__europe__sofia =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 93 || offsetMinutes == 94 then
+        (\time ->
+            if time.offsetMinutes == 93 || time.offsetMinutes == 94 then
                 Ok Lmt
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EEST")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= -781048800 then
+                    (if time.posixSeconds >= -781048800 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -844556400 then
+                     else if time.posixSeconds >= -844556400 then
                         ShortName "CEST"
 
                      else
                         ShortName "EET"
                     )
 
-            else if offsetMinutes == 116 || offsetMinutes == 117 then
+            else if time.offsetMinutes == 116 || time.offsetMinutes == 117 then
                 Ok (ShortName "IMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9092,40 +9092,40 @@ for__europe__sofia =
 for__europe__tallinn : Zone -> Posix -> Result Int Abbreviation
 for__europe__tallinn =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 99 then
+        (\time ->
+            if time.offsetMinutes == 99 then
                 Ok
-                    (if posixSeconds >= -2840146740 then
+                    (if time.posixSeconds >= -2840146740 then
                         ShortName "TMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 622598400 then
+                    (if time.posixSeconds >= 622598400 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -892954800 then
+                     else if time.posixSeconds >= -892954800 then
                         ShortName "CEST"
 
-                     else if posixSeconds >= -1535938740 then
+                     else if time.posixSeconds >= -1535938740 then
                         ShortName "EET"
 
                      else
                         ShortName "CEST"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok (ShortName "MSD")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 606870000 then
+                    (if time.posixSeconds >= 606870000 then
                         ShortName "EEST"
 
                      else
@@ -9133,7 +9133,7 @@ for__europe__tallinn =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9142,18 +9142,18 @@ for__europe__tallinn =
 for__europe__tirane : Zone -> Posix -> Result Int Abbreviation
 for__europe__tirane =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 79 || offsetMinutes == 80 then
+        (\time ->
+            if time.offsetMinutes == 79 || time.offsetMinutes == 80 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9162,15 +9162,15 @@ for__europe__tirane =
 for__europe__ulyanovsk : Zone -> Posix -> Result Int Abbreviation
 for__europe__ulyanovsk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 193 || offsetMinutes == 194 then
+        (\time ->
+            if time.offsetMinutes == 193 || time.offsetMinutes == 194 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 || offsetMinutes == 180 || offsetMinutes == 240 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 120 || time.offsetMinutes == 180 || time.offsetMinutes == 240 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9179,18 +9179,18 @@ for__europe__ulyanovsk =
 for__europe__vienna : Zone -> Posix -> Result Int Abbreviation
 for__europe__vienna =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 65 || offsetMinutes == 66 then
+        (\time ->
+            if time.offsetMinutes == 65 || time.offsetMinutes == 66 then
                 Ok Lmt
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9199,51 +9199,51 @@ for__europe__vienna =
 for__europe__vilnius : Zone -> Posix -> Result Int Abbreviation
 for__europe__vilnius =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 101 || offsetMinutes == 102 then
+        (\time ->
+            if time.offsetMinutes == 101 || time.offsetMinutes == 102 then
                 Ok Lmt
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= 941331600 then
+                    (if time.posixSeconds >= 941331600 then
                         ShortName "EET"
 
-                     else if posixSeconds >= 891133200 then
+                     else if time.posixSeconds >= 891133200 then
                         ShortName "CEST"
 
-                     else if posixSeconds >= 622598400 then
+                     else if time.posixSeconds >= 622598400 then
                         ShortName "EET"
 
-                     else if posixSeconds >= -900126000 then
+                     else if time.posixSeconds >= -900126000 then
                         ShortName "CEST"
 
                      else
                         ShortName "EET"
                     )
 
-            else if offsetMinutes == 95 || offsetMinutes == 96 then
+            else if time.offsetMinutes == 95 || time.offsetMinutes == 96 then
                 Ok (ShortName "KMT")
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok (ShortName "MSD")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 606870000 then
+                    (if time.posixSeconds >= 606870000 then
                         ShortName "EEST"
 
                      else
                         ShortName "MSK"
                     )
 
-            else if offsetMinutes == 84 then
+            else if time.offsetMinutes == 84 then
                 Ok (ShortName "WMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9252,45 +9252,45 @@ for__europe__vilnius =
 for__europe__volgograd : Zone -> Posix -> Result Int Abbreviation
 for__europe__volgograd =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 177 || offsetMinutes == 178 then
+        (\time ->
+            if time.offsetMinutes == 177 || time.offsetMinutes == 178 then
                 Ok Lmt
 
-            else if offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 240 then
+            else if time.offsetMinutes == 240 then
                 Ok
-                    (if posixSeconds >= 1540681200 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= 1540681200 then
+                        Offset time.offsetMinutes
 
-                     else if posixSeconds >= 1301180400 then
+                     else if time.posixSeconds >= 1301180400 then
                         ShortName "MSK"
 
-                     else if posixSeconds >= 701820000 then
+                     else if time.posixSeconds >= 701820000 then
                         ShortName "MSD"
 
-                     else if posixSeconds >= 670374000 then
-                        Offset offsetMinutes
+                     else if time.posixSeconds >= 670374000 then
+                        Offset time.offsetMinutes
 
-                     else if posixSeconds >= 575416800 then
+                     else if time.posixSeconds >= 575416800 then
                         ShortName "MSD"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok
-                    (if posixSeconds >= 591145200 then
+                    (if time.posixSeconds >= 591145200 then
                         ShortName "MSK"
 
                      else
-                        Offset offsetMinutes
+                        Offset time.offsetMinutes
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9299,36 +9299,36 @@ for__europe__volgograd =
 for__europe__warsaw : Zone -> Posix -> Result Int Abbreviation
 for__europe__warsaw =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 84 then
+        (\time ->
+            if time.offsetMinutes == 84 then
                 Ok
-                    (if posixSeconds >= -2840145840 then
+                    (if time.posixSeconds >= -2840145840 then
                         ShortName "WMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok
-                    (if posixSeconds >= -931734000 then
+                    (if time.posixSeconds >= -931734000 then
                         ShortName "CEST"
 
-                     else if posixSeconds >= -1618700400 then
+                     else if time.posixSeconds >= -1618700400 then
                         ShortName "EET"
 
                      else
                         ShortName "CEST"
                     )
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
-            else if offsetMinutes == 180 then
+            else if time.offsetMinutes == 180 then
                 Ok (ShortName "EEST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9337,21 +9337,21 @@ for__europe__warsaw =
 for__europe__zurich : Zone -> Posix -> Result Int Abbreviation
 for__europe__zurich =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 34 || offsetMinutes == 35 then
+        (\time ->
+            if time.offsetMinutes == 34 || time.offsetMinutes == 35 then
                 Ok Lmt
 
-            else if offsetMinutes == 29 || offsetMinutes == 30 then
+            else if time.offsetMinutes == 29 || time.offsetMinutes == 30 then
                 Ok (ShortName "BMT")
 
-            else if offsetMinutes == 120 then
+            else if time.offsetMinutes == 120 then
                 Ok (ShortName "CEST")
 
-            else if offsetMinutes == 60 then
+            else if time.offsetMinutes == 60 then
                 Ok (ShortName "CET")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9360,15 +9360,15 @@ for__europe__zurich =
 for__indian__chagos : Zone -> Posix -> Result Int Abbreviation
 for__indian__chagos =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 289 || offsetMinutes == 290 then
+        (\time ->
+            if time.offsetMinutes == 289 || time.offsetMinutes == 290 then
                 Ok Lmt
 
-            else if offsetMinutes == 300 || offsetMinutes == 360 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 || time.offsetMinutes == 360 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9377,21 +9377,21 @@ for__indian__chagos =
 for__indian__maldives : Zone -> Posix -> Result Int Abbreviation
 for__indian__maldives =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 294 then
+        (\time ->
+            if time.offsetMinutes == 294 then
                 Ok
-                    (if posixSeconds >= -2840158440 then
+                    (if time.posixSeconds >= -2840158440 then
                         ShortName "MMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9400,15 +9400,15 @@ for__indian__maldives =
 for__indian__mauritius : Zone -> Posix -> Result Int Abbreviation
 for__indian__mauritius =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 230 then
+        (\time ->
+            if time.offsetMinutes == 230 then
                 Ok Lmt
 
-            else if offsetMinutes == 240 || offsetMinutes == 300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 240 || time.offsetMinutes == 300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9417,15 +9417,15 @@ for__indian__mauritius =
 for__pacific__apia : Zone -> Posix -> Result Int Abbreviation
 for__pacific__apia =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -687 || offsetMinutes == -686 || offsetMinutes == 753 || offsetMinutes == 754 then
+        (\time ->
+            if time.offsetMinutes == -687 || time.offsetMinutes == -686 || time.offsetMinutes == 753 || time.offsetMinutes == 754 then
                 Ok Lmt
 
-            else if offsetMinutes == -690 || offsetMinutes == -660 || offsetMinutes == -600 || offsetMinutes == 780 || offsetMinutes == 840 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -690 || time.offsetMinutes == -660 || time.offsetMinutes == -600 || time.offsetMinutes == 780 || time.offsetMinutes == 840 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9434,21 +9434,21 @@ for__pacific__apia =
 for__pacific__auckland : Zone -> Posix -> Result Int Abbreviation
 for__pacific__auckland =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 699 || offsetMinutes == 700 then
+        (\time ->
+            if time.offsetMinutes == 699 || time.offsetMinutes == 700 then
                 Ok Lmt
 
-            else if offsetMinutes == 780 then
+            else if time.offsetMinutes == 780 then
                 Ok (ShortName "NZDT")
 
-            else if offsetMinutes == 690 then
+            else if time.offsetMinutes == 690 then
                 Ok (ShortName "NZMT")
 
-            else if offsetMinutes == 720 || offsetMinutes == 750 then
+            else if time.offsetMinutes == 720 || time.offsetMinutes == 750 then
                 Ok (ShortName "NZST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9457,18 +9457,18 @@ for__pacific__auckland =
 for__pacific__bougainville : Zone -> Posix -> Result Int Abbreviation
 for__pacific__bougainville =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 622 || offsetMinutes == 623 then
+        (\time ->
+            if time.offsetMinutes == 622 || time.offsetMinutes == 623 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 || offsetMinutes == 600 || offsetMinutes == 660 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 540 || time.offsetMinutes == 600 || time.offsetMinutes == 660 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 588 || offsetMinutes == 589 then
+            else if time.offsetMinutes == 588 || time.offsetMinutes == 589 then
                 Ok (ShortName "PMMT")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9477,15 +9477,15 @@ for__pacific__bougainville =
 for__pacific__chatham : Zone -> Posix -> Result Int Abbreviation
 for__pacific__chatham =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 733 || offsetMinutes == 734 then
+        (\time ->
+            if time.offsetMinutes == 733 || time.offsetMinutes == 734 then
                 Ok Lmt
 
-            else if offsetMinutes == 735 || offsetMinutes == 765 || offsetMinutes == 825 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 735 || time.offsetMinutes == 765 || time.offsetMinutes == 825 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9494,21 +9494,21 @@ for__pacific__chatham =
 for__pacific__easter : Zone -> Posix -> Result Int Abbreviation
 for__pacific__easter =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -438 || offsetMinutes == -437 then
+        (\time ->
+            if time.offsetMinutes == -438 || time.offsetMinutes == -437 then
                 Ok
-                    (if posixSeconds >= -2524495352 then
+                    (if time.posixSeconds >= -2524495352 then
                         ShortName "EMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -420 || offsetMinutes == -360 || offsetMinutes == -300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -420 || time.offsetMinutes == -360 || time.offsetMinutes == -300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9517,15 +9517,15 @@ for__pacific__easter =
 for__pacific__efate : Zone -> Posix -> Result Int Abbreviation
 for__pacific__efate =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 673 || offsetMinutes == 674 then
+        (\time ->
+            if time.offsetMinutes == 673 || time.offsetMinutes == 674 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 660 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9534,15 +9534,15 @@ for__pacific__efate =
 for__pacific__fakaofo : Zone -> Posix -> Result Int Abbreviation
 for__pacific__fakaofo =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -685 || offsetMinutes == -684 then
+        (\time ->
+            if time.offsetMinutes == -685 || time.offsetMinutes == -684 then
                 Ok Lmt
 
-            else if offsetMinutes == -660 || offsetMinutes == 780 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -660 || time.offsetMinutes == 780 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9551,15 +9551,15 @@ for__pacific__fakaofo =
 for__pacific__fiji : Zone -> Posix -> Result Int Abbreviation
 for__pacific__fiji =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 715 || offsetMinutes == 716 then
+        (\time ->
+            if time.offsetMinutes == 715 || time.offsetMinutes == 716 then
                 Ok Lmt
 
-            else if offsetMinutes == 720 || offsetMinutes == 780 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 720 || time.offsetMinutes == 780 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9568,15 +9568,15 @@ for__pacific__fiji =
 for__pacific__galapagos : Zone -> Posix -> Result Int Abbreviation
 for__pacific__galapagos =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -359 || offsetMinutes == -358 then
+        (\time ->
+            if time.offsetMinutes == -359 || time.offsetMinutes == -358 then
                 Ok Lmt
 
-            else if offsetMinutes == -360 || offsetMinutes == -300 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -360 || time.offsetMinutes == -300 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9585,21 +9585,21 @@ for__pacific__galapagos =
 for__pacific__gambier : Zone -> Posix -> Result Int Abbreviation
 for__pacific__gambier =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -539 then
+        (\time ->
+            if time.offsetMinutes == -539 then
                 Ok Lmt
 
-            else if offsetMinutes == -540 then
+            else if time.offsetMinutes == -540 then
                 Ok
-                    (if posixSeconds >= -1806678012 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= -1806678012 then
+                        Offset time.offsetMinutes
 
                      else
                         Lmt
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9608,15 +9608,15 @@ for__pacific__gambier =
 for__pacific__guadalcanal : Zone -> Posix -> Result Int Abbreviation
 for__pacific__guadalcanal =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 639 || offsetMinutes == 640 then
+        (\time ->
+            if time.offsetMinutes == 639 || time.offsetMinutes == 640 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 660 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9625,19 +9625,19 @@ for__pacific__guadalcanal =
 for__pacific__guam : Zone -> Posix -> Result Int Abbreviation
 for__pacific__guam =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -861 || offsetMinutes == 579 then
+        (\time ->
+            if time.offsetMinutes == -861 || time.offsetMinutes == 579 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 660 then
+            else if time.offsetMinutes == 660 then
                 Ok (ShortName "GDT")
 
-            else if offsetMinutes == 600 then
+            else if time.offsetMinutes == 600 then
                 Ok
-                    (if posixSeconds >= 977493600 then
+                    (if time.posixSeconds >= 977493600 then
                         ShortName "ChST"
 
                      else
@@ -9645,7 +9645,7 @@ for__pacific__guam =
                     )
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9654,27 +9654,27 @@ for__pacific__guam =
 for__pacific__honolulu : Zone -> Posix -> Result Int Abbreviation
 for__pacific__honolulu =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -632 || offsetMinutes == -631 then
+        (\time ->
+            if time.offsetMinutes == -632 || time.offsetMinutes == -631 then
                 Ok Lmt
 
-            else if offsetMinutes == -570 then
+            else if time.offsetMinutes == -570 then
                 Ok
-                    (if posixSeconds >= -769395600 then
+                    (if time.posixSeconds >= -769395600 then
                         ShortName "HPT"
 
-                     else if posixSeconds >= -880198200 then
+                     else if time.posixSeconds >= -880198200 then
                         ShortName "HWT"
 
                      else
                         ShortName "HDT"
                     )
 
-            else if offsetMinutes == -630 || offsetMinutes == -600 then
+            else if time.offsetMinutes == -630 || time.offsetMinutes == -600 then
                 Ok (ShortName "HST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9683,15 +9683,15 @@ for__pacific__honolulu =
 for__pacific__kanton : Zone -> Posix -> Result Int Abbreviation
 for__pacific__kanton =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -720 || offsetMinutes == -660 || offsetMinutes == 780 then
-                Ok (Offset offsetMinutes)
+        (\time ->
+            if time.offsetMinutes == -720 || time.offsetMinutes == -660 || time.offsetMinutes == 780 then
+                Ok (Offset time.offsetMinutes)
 
-            else if offsetMinutes == 0 then
+            else if time.offsetMinutes == 0 then
                 Ok Uninhabited
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9700,15 +9700,15 @@ for__pacific__kanton =
 for__pacific__kiritimati : Zone -> Posix -> Result Int Abbreviation
 for__pacific__kiritimati =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -630 || offsetMinutes == -629 then
+        (\time ->
+            if time.offsetMinutes == -630 || time.offsetMinutes == -629 then
                 Ok Lmt
 
-            else if offsetMinutes == -640 || offsetMinutes == -600 || offsetMinutes == 840 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -640 || time.offsetMinutes == -600 || time.offsetMinutes == 840 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9717,15 +9717,15 @@ for__pacific__kiritimati =
 for__pacific__kosrae : Zone -> Posix -> Result Int Abbreviation
 for__pacific__kosrae =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -789 || offsetMinutes == -788 || offsetMinutes == 651 || offsetMinutes == 652 then
+        (\time ->
+            if time.offsetMinutes == -789 || time.offsetMinutes == -788 || time.offsetMinutes == 651 || time.offsetMinutes == 652 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 || offsetMinutes == 600 || offsetMinutes == 660 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 540 || time.offsetMinutes == 600 || time.offsetMinutes == 660 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9734,15 +9734,15 @@ for__pacific__kosrae =
 for__pacific__kwajalein : Zone -> Posix -> Result Int Abbreviation
 for__pacific__kwajalein =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 669 || offsetMinutes == 670 then
+        (\time ->
+            if time.offsetMinutes == 669 || time.offsetMinutes == 670 then
                 Ok Lmt
 
-            else if offsetMinutes == -720 || offsetMinutes == 540 || offsetMinutes == 600 || offsetMinutes == 660 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -720 || time.offsetMinutes == 540 || time.offsetMinutes == 600 || time.offsetMinutes == 660 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9751,15 +9751,15 @@ for__pacific__kwajalein =
 for__pacific__marquesas : Zone -> Posix -> Result Int Abbreviation
 for__pacific__marquesas =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -558 then
+        (\time ->
+            if time.offsetMinutes == -558 then
                 Ok Lmt
 
-            else if offsetMinutes == -570 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -570 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9768,15 +9768,15 @@ for__pacific__marquesas =
 for__pacific__nauru : Zone -> Posix -> Result Int Abbreviation
 for__pacific__nauru =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 667 || offsetMinutes == 668 then
+        (\time ->
+            if time.offsetMinutes == 667 || time.offsetMinutes == 668 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 || offsetMinutes == 690 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 540 || time.offsetMinutes == 690 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9785,24 +9785,24 @@ for__pacific__nauru =
 for__pacific__niue : Zone -> Posix -> Result Int Abbreviation
 for__pacific__niue =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -679 then
+        (\time ->
+            if time.offsetMinutes == -679 then
                 Ok Lmt
 
-            else if offsetMinutes == -680 then
+            else if time.offsetMinutes == -680 then
                 Ok
-                    (if posixSeconds >= -543069620 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= -543069620 then
+                        Offset time.offsetMinutes
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == -660 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -660 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9811,24 +9811,24 @@ for__pacific__niue =
 for__pacific__norfolk : Zone -> Posix -> Result Int Abbreviation
 for__pacific__norfolk =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 671 then
+        (\time ->
+            if time.offsetMinutes == 671 then
                 Ok Lmt
 
-            else if offsetMinutes == 672 then
+            else if time.offsetMinutes == 672 then
                 Ok
-                    (if posixSeconds >= -2177493112 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= -2177493112 then
+                        Offset time.offsetMinutes
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 660 || offsetMinutes == 690 || offsetMinutes == 750 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 660 || time.offsetMinutes == 690 || time.offsetMinutes == 750 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9837,15 +9837,15 @@ for__pacific__norfolk =
 for__pacific__noumea : Zone -> Posix -> Result Int Abbreviation
 for__pacific__noumea =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 665 || offsetMinutes == 666 then
+        (\time ->
+            if time.offsetMinutes == 665 || time.offsetMinutes == 666 then
                 Ok Lmt
 
-            else if offsetMinutes == 660 || offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 660 || time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9854,15 +9854,15 @@ for__pacific__noumea =
 for__pacific__pago_pago : Zone -> Posix -> Result Int Abbreviation
 for__pacific__pago_pago =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -683 || offsetMinutes == -682 || offsetMinutes == 757 || offsetMinutes == 758 then
+        (\time ->
+            if time.offsetMinutes == -683 || time.offsetMinutes == -682 || time.offsetMinutes == 757 || time.offsetMinutes == 758 then
                 Ok Lmt
 
-            else if offsetMinutes == -660 then
+            else if time.offsetMinutes == -660 then
                 Ok (ShortName "SST")
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9871,15 +9871,15 @@ for__pacific__pago_pago =
 for__pacific__palau : Zone -> Posix -> Result Int Abbreviation
 for__pacific__palau =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -903 || offsetMinutes == -902 || offsetMinutes == 537 || offsetMinutes == 538 then
+        (\time ->
+            if time.offsetMinutes == -903 || time.offsetMinutes == -902 || time.offsetMinutes == 537 || time.offsetMinutes == 538 then
                 Ok Lmt
 
-            else if offsetMinutes == 540 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 540 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9888,15 +9888,15 @@ for__pacific__palau =
 for__pacific__pitcairn : Zone -> Posix -> Result Int Abbreviation
 for__pacific__pitcairn =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -521 || offsetMinutes == -520 then
+        (\time ->
+            if time.offsetMinutes == -521 || time.offsetMinutes == -520 then
                 Ok Lmt
 
-            else if offsetMinutes == -510 || offsetMinutes == -480 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -510 || time.offsetMinutes == -480 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9905,21 +9905,21 @@ for__pacific__pitcairn =
 for__pacific__port_moresby : Zone -> Posix -> Result Int Abbreviation
 for__pacific__port_moresby =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 588 || offsetMinutes == 589 then
+        (\time ->
+            if time.offsetMinutes == 588 || time.offsetMinutes == 589 then
                 Ok
-                    (if posixSeconds >= -2840176120 then
+                    (if time.posixSeconds >= -2840176120 then
                         ShortName "PMMT"
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 600 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 600 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9928,15 +9928,15 @@ for__pacific__port_moresby =
 for__pacific__rarotonga : Zone -> Posix -> Result Int Abbreviation
 for__pacific__rarotonga =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -640 || offsetMinutes == -639 || offsetMinutes == 800 || offsetMinutes == 801 then
+        (\time ->
+            if time.offsetMinutes == -640 || time.offsetMinutes == -639 || time.offsetMinutes == 800 || time.offsetMinutes == 801 then
                 Ok Lmt
 
-            else if offsetMinutes == -630 || offsetMinutes == -600 || offsetMinutes == -570 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -630 || time.offsetMinutes == -600 || time.offsetMinutes == -570 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9945,15 +9945,15 @@ for__pacific__rarotonga =
 for__pacific__tahiti : Zone -> Posix -> Result Int Abbreviation
 for__pacific__tahiti =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == -599 || offsetMinutes == -598 then
+        (\time ->
+            if time.offsetMinutes == -599 || time.offsetMinutes == -598 then
                 Ok Lmt
 
-            else if offsetMinutes == -600 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == -600 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9962,15 +9962,15 @@ for__pacific__tahiti =
 for__pacific__tarawa : Zone -> Posix -> Result Int Abbreviation
 for__pacific__tarawa =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 692 || offsetMinutes == 693 then
+        (\time ->
+            if time.offsetMinutes == 692 || time.offsetMinutes == 693 then
                 Ok Lmt
 
-            else if offsetMinutes == 720 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 720 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
 
 
@@ -9979,22 +9979,22 @@ for__pacific__tarawa =
 for__pacific__tongatapu : Zone -> Posix -> Result Int Abbreviation
 for__pacific__tongatapu =
     Internal.toTime
-        (\offsetMinutes posixSeconds ->
-            if offsetMinutes == 739 then
+        (\time ->
+            if time.offsetMinutes == 739 then
                 Ok Lmt
 
-            else if offsetMinutes == 740 then
+            else if time.offsetMinutes == 740 then
                 Ok
-                    (if posixSeconds >= -767189952 then
-                        Offset offsetMinutes
+                    (if time.posixSeconds >= -767189952 then
+                        Offset time.offsetMinutes
 
                      else
                         Lmt
                     )
 
-            else if offsetMinutes == 780 || offsetMinutes == 840 then
-                Ok (Offset offsetMinutes)
+            else if time.offsetMinutes == 780 || time.offsetMinutes == 840 then
+                Ok (Offset time.offsetMinutes)
 
             else
-                Err offsetMinutes
+                Err time.offsetMinutes
         )
