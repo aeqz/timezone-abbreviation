@@ -3,7 +3,7 @@
     "name": "aeqz/timezone-abbreviation",
     "summary": "Time zone name abbreviations from the IANA Time Zone Database",
     "license": "BSD-3-Clause",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "source-directories": [
         "src"
     ],

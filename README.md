@@ -20,9 +20,9 @@ See some end-to-end example code in the [`examples/`][examples] folder.
 
 ## Installation
 
-This package is not published yet. I'm sharing it for review purposes before an initial release.
-
-Import all the files from the [`docs/`][docs] folder into the [`Elm Documentation Previewer`][docpreview] if you want to preview this package documentation and provide feedback!
+```sh
+elm install aeqz/timezone-abbreviation
+```
 
 ## Design Goals
 
@@ -55,8 +55,6 @@ I found [this page][readiana] to be a useful reading when learning how abbreviat
 
 [tzdb]: https://www.iana.org/time-zones
 [examples]: https://github.com/aeqz/timezone-abbreviation/tree/main/examples
-[docs]: https://github.com/aeqz/timezone-abbreviation/tree/main/docs
-[docpreview]: https://elm-doc-preview.netlify.app/
 [elmtime]: https://package.elm-lang.org/packages/elm/time/latest/
 [timezonedata]: https://package.elm-lang.org/packages/justinmimbs/timezone-data/latest/
 [intldatetime]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
