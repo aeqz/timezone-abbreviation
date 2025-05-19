@@ -42,12 +42,12 @@ import Time exposing (Posix, Zone, ZoneName)
 {-| What release of the IANA Time Zone Database is this data from?
 
     version
-    --> "2024b"
+    --> "2025a"
 
 -}
 version : String
 version =
-    "2024b"
+    "2025a"
 
 
 {-| A time zone abbreviation, which can be a `ShortName`, an `Offset` in minutes, an `Uninhabited`
@@ -6940,15 +6940,15 @@ for__asia__manila : Zone -> Posix -> Result Int Abbreviation
 for__asia__manila =
     Internal.toTime
         (\time ->
-            if time.offsetMinutes == -956 || time.offsetMinutes == 484 then
+            if time.offsetMinutes == -957 || time.offsetMinutes == -956 || time.offsetMinutes == 483 || time.offsetMinutes == 484 then
                 Ok Lmt
 
             else if time.offsetMinutes == 540 then
                 Ok
-                    (if time.posixSeconds >= -496224000 then
+                    (if time.posixSeconds >= -783594000 then
                         ShortName "PDT"
 
-                     else if time.posixSeconds >= -873273600 then
+                     else if time.posixSeconds >= -880016400 then
                         ShortName "JST"
 
                      else
