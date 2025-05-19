@@ -209,12 +209,12 @@ type Error
 
     Time.millisToPosix 1743465600000
         |> TimeZone.Abbreviation.forZoneUnsafe
-            ( Time.Name "Europe/Nowere"
+            ( Time.Name "Europe/Nowhere"
             , Time.customZone 60 []
             )
     --> Offset 60
 
-Which would have returned an `UnknownZoneName "Europe/Nowere"` error if using
+Which would have returned an `UnknownZoneName "Europe/Nowhere"` error if using
 `forZone`.
 
 -}

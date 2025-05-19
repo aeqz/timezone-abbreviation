@@ -111,10 +111,10 @@ suite =
                 [ Test.fuzz2 (Fuzz.fixedOffsetZone Internal.maxOffsetMinutes) Fuzz.posix "for an unknown zone name" <|
                     \{ zone } ->
                         TimeZone.Abbreviation.forZone
-                            ( Time.Name "Nowere/Nowere"
+                            ( Time.Name "Nowhere/Nowhere"
                             , zone
                             )
-                            >> Expect.errWith (Expect.equal (UnknownZoneName "Nowere/Nowere"))
+                            >> Expect.errWith (Expect.equal (UnknownZoneName "Nowhere/Nowhere"))
                 , Test.fuzz2 (Fuzz.constant (Time.customZone -120 [])) Fuzz.posix "for an unknown zone offset" <|
                     \zone ->
                         TimeZone.Abbreviation.forZone
@@ -142,7 +142,7 @@ suite =
             [ Test.fuzz2 (Fuzz.fixedOffsetZone Internal.maxOffsetMinutes) Fuzz.posix "suppresses unknown zone name error" <|
                 \{ offset, zone } ->
                     TimeZone.Abbreviation.forZoneUnsafe
-                        ( Time.Name "Nowere/Nowere"
+                        ( Time.Name "Nowhere/Nowhere"
                         , zone
                         )
                         >> Expect.offsetAbbreviation (Expect.equal offset)
