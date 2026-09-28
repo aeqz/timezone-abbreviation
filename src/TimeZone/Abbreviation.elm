@@ -42,12 +42,12 @@ import Time exposing (Posix, Zone, ZoneName)
 {-| What release of the IANA Time Zone Database is this data from?
 
     version
-    --> "2025b"
+    --> "2026d"
 
 -}
 version : String
 version =
-    "2025b"
+    "2026d"
 
 
 {-| A time zone abbreviation, which can be a `ShortName`, an `Offset` in minutes, an `Uninhabited`
@@ -1583,9 +1583,6 @@ forZoneName name =
         "CET" ->
             withError for__europe__brussels
 
-        "CST6CDT" ->
-            withError for__america__chicago
-
         "Canada/Atlantic" ->
             withError for__america__halifax
 
@@ -1624,9 +1621,6 @@ forZoneName name =
 
         "EST" ->
             withError for__america__panama
-
-        "EST5EDT" ->
-            withError for__america__new_york
 
         "Egypt" ->
             withError for__africa__cairo
@@ -1775,9 +1769,6 @@ forZoneName name =
         "MST" ->
             withError for__america__phoenix
 
-        "MST7MDT" ->
-            withError for__america__denver
-
         "Mexico/BajaNorte" ->
             withError for__america__tijuana
 
@@ -1798,9 +1789,6 @@ forZoneName name =
 
         "PRC" ->
             withError for__asia__shanghai
-
-        "PST8PDT" ->
-            withError for__america__los_angeles
 
         "Pacific/Chuuk" ->
             withError for__pacific__port_moresby
@@ -3440,7 +3428,10 @@ for__america__edmonton =
 
             else if time.offsetMinutes == -360 then
                 Ok
-                    (if time.posixSeconds >= -715791600 then
+                    (if time.posixSeconds >= 1793520000 then
+                        ShortName "CST"
+
+                     else if time.posixSeconds >= -715791600 then
                         ShortName "MDT"
 
                      else if time.posixSeconds >= -769395600 then
@@ -4161,7 +4152,13 @@ for__america__inuvik =
                 Ok Uninhabited
 
             else if time.offsetMinutes == -360 then
-                Ok (ShortName "MDT")
+                Ok
+                    (if time.posixSeconds >= 1793520000 then
+                        ShortName "CST"
+
+                     else
+                        ShortName "MDT"
+                    )
 
             else if time.offsetMinutes == -420 then
                 Ok
@@ -5786,7 +5783,10 @@ for__america__vancouver =
 
             else if time.offsetMinutes == -420 then
                 Ok
-                    (if time.posixSeconds >= -747237600 then
+                    (if time.posixSeconds >= 1793523600 then
+                        ShortName "MST"
+
+                     else if time.posixSeconds >= -747237600 then
                         ShortName "PDT"
 
                      else if time.posixSeconds >= -769395600 then
