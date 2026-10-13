@@ -42,12 +42,12 @@ import Time exposing (Posix, Zone, ZoneName)
 {-| What release of the IANA Time Zone Database is this data from?
 
     version
-    --> "2026d"
+    --> "2026e"
 
 -}
 version : String
 version =
-    "2026d"
+    "2026e"
 
 
 {-| A time zone abbreviation, which can be a `ShortName`, an `Offset` in minutes, an `Uninhabited`
@@ -5868,7 +5868,10 @@ for__america__winnipeg =
 
             else if time.offsetMinutes == -300 then
                 Ok
-                    (if time.posixSeconds >= -746035200 then
+                    (if time.posixSeconds >= 1793516400 then
+                        ShortName "EST"
+
+                     else if time.posixSeconds >= -746035200 then
                         ShortName "CDT"
 
                      else if time.posixSeconds >= -769395600 then
